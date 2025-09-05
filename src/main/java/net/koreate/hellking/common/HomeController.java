@@ -1,4 +1,4 @@
-package net.koreate.hellking;
+package net.koreate.hellking.common;
 
 import java.text.DateFormat;
 import java.util.Date;
