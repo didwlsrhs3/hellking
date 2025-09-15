@@ -3,29 +3,47 @@ package net.koreate.hellking.review.dao;
 import org.apache.ibatis.annotations.*;
 import net.koreate.hellking.review.vo.*;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface ReviewDAO {
     
-    // 리뷰 기본 CRUD
+    // Oracle IDENTITY 컬럼용 - Options로 keyColumn 명시
     @Insert("INSERT INTO hk_reviews (user_num, chain_num, rating, title, content) " +
             "VALUES (#{userNum}, #{chainNum}, #{rating}, #{title}, #{content})")
-    @Options(useGeneratedKeys = true, keyProperty = "reviewNum")
+    @Options(useGeneratedKeys = true, keyProperty = "reviewNum", keyColumn = "review_num")
     int insertReview(ReviewVO review);
     
-    @Select("SELECT r.*, u.username, u.profile_image as user_profile_image, " +
-            "       c.chain_name, c.address as chain_address, " +
-            "       COUNT(rc.comment_num) as comment_count " +
+    // 백업 방법: SelectKey 사용
+    @Insert("INSERT INTO hk_reviews (user_num, chain_num, rating, title, content) " +
+            "VALUES (#{userNum}, #{chainNum}, #{rating}, #{title}, #{content})")
+    @SelectKey(statement = "SELECT review_num FROM hk_reviews WHERE ROWID = (SELECT MAX(ROWID) FROM hk_reviews)", 
+               keyProperty = "reviewNum", before = false, resultType = Long.class)
+    int insertReviewWithSelectKey(ReviewVO review);
+    
+    // 대안 방법: RETURNING 절 사용 (Oracle 12c+)
+    @Insert("INSERT INTO hk_reviews (user_num, chain_num, rating, title, content) " +
+            "VALUES (#{userNum}, #{chainNum}, #{rating}, #{title}, #{content}) " +
+            "RETURNING review_num INTO #{reviewNum}")
+    int insertReviewWithReturning(ReviewVO review);
+    
+    // 리뷰 상세 조회
+    @Select("SELECT r.review_num as reviewNum, " +
+            "       r.user_num as userNum, " +
+            "       r.chain_num as chainNum, " +
+            "       r.rating, r.title, r.content, " +
+            "       r.like_count as likeCount, " +
+            "       r.dislike_count as dislikeCount, " +
+            "       r.is_excellent as isExcellent, " +
+            "       r.view_count as viewCount, " +
+            "       r.created_at as createdAt, " +
+            "       u.username, " +
+            "       u.profile_image as userProfileImage, " +
+            "       c.chain_name as chainName, " +
+            "       c.address as chainAddress " +
             "FROM hk_reviews r " +
-            "JOIN hk_users u ON r.user_num = u.user_num " +
-            "JOIN hk_chains c ON r.chain_num = c.chain_num " +
-            "LEFT JOIN hk_review_comments rc ON r.review_num = rc.review_num " +
-            "WHERE r.review_num = #{reviewNum} " +
-            "GROUP BY r.review_num, r.user_num, r.chain_num, r.rating, r.title, " +
-            "         r.content, r.like_count, r.dislike_count, r.is_excellent, " +
-            "         r.view_count, r.created_at, u.username, u.profile_image, " +
-            "         c.chain_name, c.address")
+            "LEFT JOIN hk_users u ON r.user_num = u.user_num " +
+            "LEFT JOIN hk_chains c ON r.chain_num = c.chain_num " +
+            "WHERE r.review_num = #{reviewNum}")
     ReviewVO selectByReviewNum(Long reviewNum);
     
     @Update("UPDATE hk_reviews SET title = #{title}, content = #{content}, rating = #{rating} " +
@@ -35,14 +53,21 @@ public interface ReviewDAO {
     @Delete("DELETE FROM hk_reviews WHERE review_num = #{reviewNum} AND user_num = #{userNum}")
     int deleteReview(@Param("reviewNum") Long reviewNum, @Param("userNum") Long userNum);
     
-    // *** 문제 해결: CLOB 컬럼을 GROUP BY에서 제외하고 서브쿼리 사용 ***
-    @Select("SELECT r.review_num, r.user_num, r.chain_num, r.rating, r.title, " +
-            "       SUBSTR(r.content, 1, 200) as content, " +  // CLOB을 VARCHAR로 변환
-            "       r.like_count, r.dislike_count, r.is_excellent, " +
-            "       r.view_count, r.created_at, " +
-            "       u.username, u.profile_image as user_profile_image, " +
-            "       c.chain_name, " +
-            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as comment_count " +
+    // 전체 리뷰 목록
+    @Select("SELECT r.review_num as reviewNum, " +
+            "       r.user_num as userNum, " +
+            "       r.chain_num as chainNum, " +
+            "       r.rating, r.title, " +
+            "       SUBSTR(r.content, 1, 200) as content, " +
+            "       r.like_count as likeCount, " +
+            "       r.dislike_count as dislikeCount, " +
+            "       r.is_excellent as isExcellent, " +
+            "       r.view_count as viewCount, " +
+            "       r.created_at as createdAt, " +
+            "       u.username, " +
+            "       u.profile_image as userProfileImage, " +
+            "       c.chain_name as chainName, " +
+            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as commentCount " +
             "FROM hk_reviews r " +
             "JOIN hk_users u ON r.user_num = u.user_num " +
             "JOIN hk_chains c ON r.chain_num = c.chain_num " +
@@ -56,13 +81,20 @@ public interface ReviewDAO {
                                    @Param("offset") int offset, 
                                    @Param("size") int size);
     
-    // 가맹점별 리뷰 - 동일한 방식으로 수정
-    @Select("SELECT r.review_num, r.user_num, r.chain_num, r.rating, r.title, " +
+    // 가맹점별 리뷰
+    @Select("SELECT r.review_num as reviewNum, " +
+            "       r.user_num as userNum, " +
+            "       r.chain_num as chainNum, " +
+            "       r.rating, r.title, " +
             "       SUBSTR(r.content, 1, 200) as content, " +
-            "       r.like_count, r.dislike_count, r.is_excellent, " +
-            "       r.view_count, r.created_at, " +
-            "       u.username, u.profile_image as user_profile_image, " +
-            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as comment_count " +
+            "       r.like_count as likeCount, " +
+            "       r.dislike_count as dislikeCount, " +
+            "       r.is_excellent as isExcellent, " +
+            "       r.view_count as viewCount, " +
+            "       r.created_at as createdAt, " +
+            "       u.username, " +
+            "       u.profile_image as userProfileImage, " +
+            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as commentCount " +
             "FROM hk_reviews r " +
             "JOIN hk_users u ON r.user_num = u.user_num " +
             "WHERE r.chain_num = #{chainNum} " +
@@ -73,12 +105,18 @@ public interface ReviewDAO {
                                    @Param("size") int size);
     
     // 사용자별 리뷰
-    @Select("SELECT r.review_num, r.user_num, r.chain_num, r.rating, r.title, " +
+    @Select("SELECT r.review_num as reviewNum, " +
+            "       r.user_num as userNum, " +
+            "       r.chain_num as chainNum, " +
+            "       r.rating, r.title, " +
             "       SUBSTR(r.content, 1, 200) as content, " +
-            "       r.like_count, r.dislike_count, r.is_excellent, " +
-            "       r.view_count, r.created_at, " +
-            "       c.chain_name, " +
-            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as comment_count " +
+            "       r.like_count as likeCount, " +
+            "       r.dislike_count as dislikeCount, " +
+            "       r.is_excellent as isExcellent, " +
+            "       r.view_count as viewCount, " +
+            "       r.created_at as createdAt, " +
+            "       c.chain_name as chainName, " +
+            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as commentCount " +
             "FROM hk_reviews r " +
             "JOIN hk_chains c ON r.chain_num = c.chain_num " +
             "WHERE r.user_num = #{userNum} " +
@@ -86,18 +124,25 @@ public interface ReviewDAO {
     List<ReviewVO> selectByUserNum(Long userNum);
     
     // 우수 리뷰
-    @Select("SELECT r.review_num, r.user_num, r.chain_num, r.rating, r.title, " +
+    @Select("SELECT r.review_num as reviewNum, " +
+            "       r.user_num as userNum, " +
+            "       r.chain_num as chainNum, " +
+            "       r.rating, r.title, " +
             "       SUBSTR(r.content, 1, 200) as content, " +
-            "       r.like_count, r.dislike_count, r.is_excellent, " +
-            "       r.view_count, r.created_at, " +
-            "       u.username, u.profile_image as user_profile_image, " +
-            "       c.chain_name, " +
-            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as comment_count " +
+            "       r.like_count as likeCount, " +
+            "       r.dislike_count as dislikeCount, " +
+            "       r.is_excellent as isExcellent, " +
+            "       r.view_count as viewCount, " +
+            "       r.created_at as createdAt, " +
+            "       u.username, " +
+            "       u.profile_image as userProfileImage, " +
+            "       c.chain_name as chainName, " +
+            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as commentCount " +
             "FROM hk_reviews r " +
             "JOIN hk_users u ON r.user_num = u.user_num " +
             "JOIN hk_chains c ON r.chain_num = c.chain_num " +
-            "WHERE r.rating >= 4.5 AND r.like_count >= 10 " +
-            "ORDER BY r.like_count DESC, r.rating DESC " +
+            "WHERE r.rating >= 4.0 " +
+            "ORDER BY r.rating DESC, r.like_count DESC " +
             "FETCH FIRST #{limit} ROWS ONLY")
     List<ReviewVO> selectExcellentReviews(int limit);
     
@@ -108,9 +153,16 @@ public interface ReviewDAO {
     // 댓글 관련
     @Insert("INSERT INTO hk_review_comments (review_num, user_num, content) " +
             "VALUES (#{reviewNum}, #{userNum}, #{content})")
+    @Options(useGeneratedKeys = true, keyProperty = "commentNum", keyColumn = "comment_num")
     int insertComment(ReviewCommentVO comment);
     
-    @Select("SELECT rc.*, u.username, u.profile_image as user_profile_image " +
+    @Select("SELECT rc.comment_num as commentNum, " +
+            "       rc.review_num as reviewNum, " +
+            "       rc.user_num as userNum, " +
+            "       rc.content, " +
+            "       rc.created_at as createdAt, " +
+            "       u.username, " +
+            "       u.profile_image as userProfileImage " +
             "FROM hk_review_comments rc " +
             "JOIN hk_users u ON rc.user_num = u.user_num " +
             "WHERE rc.review_num = #{reviewNum} " +
@@ -121,9 +173,12 @@ public interface ReviewDAO {
     int deleteComment(@Param("commentNum") Long commentNum, @Param("userNum") Long userNum);
     
     // 좋아요/싫어요 관련
-    @Insert("INSERT INTO hk_review_likes (review_num, user_num, like_type) " +
-            "VALUES (#{reviewNum}, #{userNum}, #{likeType}) " +
-            "ON DUPLICATE KEY UPDATE like_type = #{likeType}")
+    @Update("MERGE INTO hk_review_likes hl " +
+            "USING (SELECT #{reviewNum} as review_num, #{userNum} as user_num, #{likeType} as like_type FROM dual) src " +
+            "ON (hl.review_num = src.review_num AND hl.user_num = src.user_num) " +
+            "WHEN MATCHED THEN UPDATE SET hl.like_type = src.like_type " +
+            "WHEN NOT MATCHED THEN INSERT (review_num, user_num, like_type) " +
+            "VALUES (src.review_num, src.user_num, src.like_type)")
     int insertOrUpdateLike(@Param("reviewNum") Long reviewNum, 
                           @Param("userNum") Long userNum, 
                           @Param("likeType") String likeType);
@@ -135,27 +190,33 @@ public interface ReviewDAO {
     String getUserLikeType(@Param("reviewNum") Long reviewNum, @Param("userNum") Long userNum);
     
     // 좋아요/싫어요 수 업데이트
-    @Update("UPDATE hk_reviews SET like_count = (" +
-            "  SELECT COUNT(*) FROM hk_review_likes WHERE review_num = #{reviewNum} AND like_type = 'LIKE'" +
-            "), dislike_count = (" +
-            "  SELECT COUNT(*) FROM hk_review_likes WHERE review_num = #{reviewNum} AND like_type = 'DISLIKE'" +
-            ") WHERE review_num = #{reviewNum}")
+    @Update("UPDATE hk_reviews SET " +
+            "like_count = (SELECT COUNT(*) FROM hk_review_likes WHERE review_num = #{reviewNum} AND like_type = 'LIKE'), " +
+            "dislike_count = (SELECT COUNT(*) FROM hk_review_likes WHERE review_num = #{reviewNum} AND like_type = 'DISLIKE') " +
+            "WHERE review_num = #{reviewNum}")
     int updateLikeCounts(Long reviewNum);
     
-    // 검색 - 수정
-    @Select("SELECT r.review_num, r.user_num, r.chain_num, r.rating, r.title, " +
+    // 검색
+    @Select("SELECT r.review_num as reviewNum, " +
+            "       r.user_num as userNum, " +
+            "       r.chain_num as chainNum, " +
+            "       r.rating, r.title, " +
             "       SUBSTR(r.content, 1, 200) as content, " +
-            "       r.like_count, r.dislike_count, r.is_excellent, " +
-            "       r.view_count, r.created_at, " +
-            "       u.username, u.profile_image as user_profile_image, " +
-            "       c.chain_name, " +
-            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as comment_count " +
+            "       r.like_count as likeCount, " +
+            "       r.dislike_count as dislikeCount, " +
+            "       r.is_excellent as isExcellent, " +
+            "       r.view_count as viewCount, " +
+            "       r.created_at as createdAt, " +
+            "       u.username, " +
+            "       u.profile_image as userProfileImage, " +
+            "       c.chain_name as chainName, " +
+            "       (SELECT COUNT(*) FROM hk_review_comments rc WHERE rc.review_num = r.review_num) as commentCount " +
             "FROM hk_reviews r " +
             "JOIN hk_users u ON r.user_num = u.user_num " +
             "JOIN hk_chains c ON r.chain_num = c.chain_num " +
-            "WHERE r.title LIKE '%'||#{keyword}||'%' " +
-            "   OR DBMS_LOB.INSTR(r.content, #{keyword}) > 0 " +  // CLOB 검색 방법 변경
-            "   OR c.chain_name LIKE '%'||#{keyword}||'%' " +
+            "WHERE UPPER(r.title) LIKE UPPER('%'||#{keyword}||'%') " +
+            "   OR UPPER(DBMS_LOB.SUBSTR(r.content, 4000, 1)) LIKE UPPER('%'||#{keyword}||'%') " +
+            "   OR UPPER(c.chain_name) LIKE UPPER('%'||#{keyword}||'%') " +
             "ORDER BY r.created_at DESC " +
             "OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY")
     List<ReviewVO> searchReviews(@Param("keyword") String keyword,
@@ -171,4 +232,12 @@ public interface ReviewDAO {
     
     @Select("SELECT COUNT(*) FROM hk_reviews WHERE user_num = #{userNum}")
     int getUserReviewCount(Long userNum);
+    
+    // 검색 결과 개수
+    @Select("SELECT COUNT(*) FROM hk_reviews r " +
+            "JOIN hk_chains c ON r.chain_num = c.chain_num " +
+            "WHERE UPPER(r.title) LIKE UPPER('%'||#{keyword}||'%') " +
+            "   OR UPPER(DBMS_LOB.SUBSTR(r.content, 4000, 1)) LIKE UPPER('%'||#{keyword}||'%') " +
+            "   OR UPPER(c.chain_name) LIKE UPPER('%'||#{keyword}||'%')")
+    int getSearchResultCount(@Param("keyword") String keyword);
 }

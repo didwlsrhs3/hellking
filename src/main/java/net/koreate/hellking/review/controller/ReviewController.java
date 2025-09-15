@@ -77,22 +77,34 @@ public class ReviewController {
     // 리뷰 작성 처리
     @PostMapping("write")
     public String writePost(ReviewVO review, HttpSession session, RedirectAttributes rttr) {
+        System.out.println("=== 리뷰 작성 요청 받음 ===");
+        System.out.println("받은 데이터: " + review.toString());
+        
         Long userNum = userService.getCurrentUserNum(session);
+        System.out.println("현재 사용자: " + userNum);
+        
         if (userNum == null) {
+            System.out.println("로그인되지 않은 사용자");
             return "redirect:/user/login";
         }
         
         review.setUserNum(userNum);
+        System.out.println("최종 저장할 데이터: " + review.toString());
         
         try {
             boolean success = reviewService.writeReview(review);
+            System.out.println("저장 결과: " + success);
+            
             if (success) {
                 rttr.addFlashAttribute("message", "리뷰가 작성되었습니다.");
                 return "redirect:/reviews/list";
             } else {
+                System.out.println("저장 실패");
                 rttr.addFlashAttribute("message", "리뷰 작성에 실패했습니다.");
             }
         } catch (Exception e) {
+            System.out.println("예외 발생: " + e.getMessage());
+            e.printStackTrace();
             rttr.addFlashAttribute("message", e.getMessage());
         }
         

@@ -20,7 +20,7 @@
 			<td>작성자</td>
 			<td>
 				<!-- 작성자 이름 들어갈 자리 -->
-				${list.writer}
+				${list.nickname}
 			</td>
 		</tr>
 		<tr>

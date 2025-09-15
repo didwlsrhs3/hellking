@@ -11,7 +11,7 @@ public interface UserDAO {
     
     // === 기본 CRUD ===
     @Insert("INSERT INTO hk_users (user_id, username, email, phone, password, profile_image, birth_date, gender) " +
-            "VALUES (#{userId}, #{username}, #{email}, #{phone}, #{password}, #{profileImage}, #{birthDate}, #{gender})")
+            "VALUES (#{userId}, #{username}, #{email}, #{phone}, #{password}, #{profileImage, jdbcType=VARCHAR}, #{birthDate, jdbcType=DATE}, #{gender, jdbcType=VARCHAR})")
     @Options(useGeneratedKeys = true, keyProperty = "userNum", keyColumn = "user_num")
     int insertUser(UserVO user);
     
@@ -82,8 +82,14 @@ public interface UserDAO {
     @Select("SELECT * FROM hk_users WHERE phone = #{phone} AND status = 'ACTIVE'")
     UserVO selectByPhone(String phone);
     
-    @Update("UPDATE hk_users SET username = #{username}, email = #{email}, phone = #{phone}, " +
-            "profile_image = #{profileImage}, birth_date = #{birthDate}, gender = #{gender} " +
+    // 핵심 수정: NULL 값 처리를 위한 jdbcType 명시
+    @Update("UPDATE hk_users SET " +
+            "username = #{username}, " +
+            "email = #{email}, " +
+            "phone = #{phone}, " +
+            "profile_image = #{profileImage, jdbcType=VARCHAR}, " +
+            "birth_date = #{birthDate, jdbcType=DATE}, " +
+            "gender = #{gender, jdbcType=VARCHAR} " +
             "WHERE user_num = #{userNum}")
     int updateUser(UserVO user);
     

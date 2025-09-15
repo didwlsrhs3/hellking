@@ -38,12 +38,12 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="ds"/>
         <property name="mapperLocations" value="classpath:/mybatis/sql/*.xml"/>
-        <property name="typeAliasesPackage" value="net.koreate.hellking.board.vo,net.koreate.hellking.board.secretboard.vo,net.koreate.hellking.board.localboard.vo,net.koreate.hellking.user.vo,net.koreate.hellking.review.vo,net.koreate.hellking.chain.vo,net.koreate.hellking.pass.vo"/>
+        <property name="typeAliasesPackage" value="net.koreate.hellking.*.vo"/>
         <property name="configurationProperties">
             <props>
                 <prop key="mapUnderscoreToCamelCase">true</prop>
                 <prop key="callSettersOnNulls">true</prop>
-                <prop key="jdbcTypeForNull">NULL</prop>
+                <prop key="jdbcTypeForNull">VARCHAR</prop>
                 <!-- MyBatis 로깅 활성화 -->
                 <prop key="logImpl">STDOUT_LOGGING</prop>
             </props>

@@ -22,8 +22,8 @@
 			<textarea name="content" required rows="5" cols="20">${boardVO.content}</textarea>
 		</div>
 		<div>
-			<label>WRITER</label>
-			<input type="text" name="writer" required value="${boardVO.writer}">
+			<label>NICKNAME</label>
+			<input type="text" name="writer" required value="${boardVO.nickname}">
 		</div>
 		<div>
 			<input type="submit" value="글 수정">

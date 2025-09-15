@@ -16,6 +16,9 @@
 			<th class="boardtitle">모든 게시글</th>
 		</tr>
 		<tr>
+			<button onclick="location.href='register';">게시물 작성</button>
+		</tr>
+		<tr>
 			<td>모든 게시글 테이블</td>
 		</tr>
 		<tr>
@@ -30,7 +33,7 @@
 			<tr>
 				<td>${list.bno}</td>
 				<td><a href="readPage?bno=${list.bno}">${list.title}</a></td>
-				<td>${list.writer}</td>
+				<td>${list.nickname}</td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}" /></td>
 				<td>${list.viewcnt}</td>
 				<td>${list.agree}</td>
