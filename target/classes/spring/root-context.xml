@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+    <!-- Properties 파일 로드 -->
+    <context:property-placeholder location="classpath:prop/*.properties"/>        
+     
+    <!-- 서비스와 레포지토리만 스캔 (컨트롤러 제외) -->
+	<context:component-scan base-package="net.koreate.hellking">
+	    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+     
+    <!-- Oracle Database HikariCP 설정 -->
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="maximumPoolSize" value="20" />
+        <property name="minimumIdle" value="20" />
+        <property name="connectionTimeout" value="300000"/>
+        <property name="idleTimeout" value="200000"/>
+    </bean>
+     
+    <!-- DataSource -->
+    <bean id="ds" class="com.zaxxer.hikari.HikariDataSource">
+        <constructor-arg ref="hikariConfig"/>
+    </bean>
+     
+    <!-- MyBatis SqlSessionFactory (로깅 강화) -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="ds"/>
+        <property name="mapperLocations" value="classpath:/mybatis/sql/*.xml"/>
+        <property name="typeAliasesPackage" value="net.koreate.hellking.board.vo,net.koreate.hellking.board.secretboard.vo,net.koreate.hellking.board.localboard.vo,net.koreate.hellking.user.vo,net.koreate.hellking.review.vo,net.koreate.hellking.chain.vo,net.koreate.hellking.pass.vo"/>
+        <property name="configurationProperties">
+            <props>
+                <prop key="mapUnderscoreToCamelCase">true</prop>
+                <prop key="callSettersOnNulls">true</prop>
+                <prop key="jdbcTypeForNull">NULL</prop>
+                <!-- MyBatis 로깅 활성화 -->
+                <prop key="logImpl">STDOUT_LOGGING</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!-- SqlSession Template -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+    
+    <!-- MyBatis Mapper 스캔 -->
+    <mybatis-spring:scan base-package="net.koreate.hellking.*.dao"/>
+     
+    <!-- Transaction Manager -->
+    <bean id="transactionManager"
+            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="ds" />
+    </bean>
+  
+    <!-- @Transactional annotation 기반 transaction 제어 -->
+    <tx:annotation-driven/>
+     
+    <!-- BCrypt 패스워드 인코더 -->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+     
+    <!-- 메일 발송 객체 -->
+    <bean id="mailSender"
+          class="org.springframework.mail.javamail.JavaMailSenderImpl">
+          <property name="host" value="smtp.gmail.com"/>
+          <property name="port" value="587" />
+          <property name="username" value="${gmail.username}"/>
+          <property name="password" value="${gmail.password}" />
+          <property name="javaMailProperties">
+              <props>
+                  <prop key="mail.transport.protocol">smtp</prop>
+                  <prop key="mail.smtp.auth">true</prop>
+                  <prop key="mail.smtp.starttls.enable">true</prop>
+              </props>
+          </property>
+    </bean>
+     
+    <!-- CoolSMS MessageService -->
+    <bean id="messageService" class="net.nurigo.sdk.message.service.DefaultMessageService">
+        <constructor-arg value="${api_key}"/>
+        <constructor-arg value="${secret_api_key}"/>
+        <constructor-arg value="${domain}"/>
+    </bean>
+     
+</beans>

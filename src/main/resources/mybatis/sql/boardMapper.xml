@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- classpath:/mybatis/sql/boardMapper.xml -->
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- <mapper namespace="boardMapper"> -->
+<!-- 호출되어서 함께 동작할 인터페이스 지정 -->
+<mapper namespace="boardMapper">
+
+	<!-- parameterType="net.koreate.hellking.board.dao.BoardDAO" -->
+	<!-- int create(BoardVO board) -->
+	<insert id="create" parameterType="boardVO">
+		INSERT INTO hell_board(title,content,writer) 
+		VALUES(#{title},#{content},#{writer})
+	</insert>
+	
+	<select id="listCriteria" 
+			parameterType="net.koreate.hellking.common.util.Criteria" 
+			resultType="boardVO">
+		SELECT * FROM hell_board ORDER BY bno DESC 
+		OFFSET #{startRow} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+	</select>
+	
+	<select id="totalCount" resultType="int">
+		SELECT count(*) FROM hell_board
+	</select>
+	
+	<select id="getHotBoard" resultType="boardVO" parameterType="boardVO">
+		SELECT * FROM hell_board
+        WHERE agree >= #{HotAgree}
+	</select>
+
+	<!-- viewcnt 컬럼 기존 데이터를 1 증가해서 저장 -->
+	<update id="updateCnt" parameterType="int">
+		UPDATE hell_board SET viewcnt = viewcnt + 1 
+		WHERE bno = #{bno}
+	</update>
+	
+	<!-- 게시글 번호로 검색한 1개의 게시글 정보  -->
+	<select id="read" parameterType="int" resultType="boardVO">
+		SELECT * FROM hell_board WHERE bno = #{bno}
+	</select>
+	
+	<update id="update" parameterType="boardVO">
+		UPDATE hell_board SET title = #{title}, content = #{content}, 
+		writer = #{writer} WHERE bno = #{bno}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM hell_board WHERE bno = #{bno}
+	</delete>
+	
+	<!-- 추천 수 증가 및 증가시킨후 실시간 추천수 불러오기 -->
+	<update id="updateAgree" parameterType="int">
+		UPDATE hell_board SET agree = agree + 1
+		WHERE bno = #{bno}
+	</update>
+	
+	<select id="viewAgree" resultType="int" parameterType="int">
+		SELECT agree
+		FROM hell_board
+		WHERE bno = #{bno}
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
