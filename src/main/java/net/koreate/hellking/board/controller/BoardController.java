@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
-import net.koreate.hellking.board.localboard.service.LocalBoardService;
-import net.koreate.hellking.board.localboard.vo.LocalBoardVO;
-import net.koreate.hellking.board.secretboard.service.SecretBoardService;
-import net.koreate.hellking.board.secretboard.vo.SecretBoardVO;
 import net.koreate.hellking.board.service.BoardService;
+import net.koreate.hellking.board.service.LocalBoardService;
+import net.koreate.hellking.board.service.SecretBoardService;
 import net.koreate.hellking.board.vo.BoardVO;
+import net.koreate.hellking.board.vo.LocalBoardVO;
+import net.koreate.hellking.board.vo.SecretBoardVO;
 import net.koreate.hellking.common.util.Criteria;
 import net.koreate.hellking.common.util.PageMaker;
 

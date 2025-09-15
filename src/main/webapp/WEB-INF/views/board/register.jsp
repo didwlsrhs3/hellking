@@ -21,7 +21,7 @@
 		</div>
 		<div>
 			<label>작성자</label>
-			<input type="text" name="writer" required >
+			<input type="text" name="nickname" required >
 		</div>
 		<div>
 			<input type="submit" value="글 작성">

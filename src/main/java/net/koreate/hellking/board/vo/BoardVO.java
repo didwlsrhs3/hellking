@@ -10,7 +10,7 @@ public class BoardVO {
 	private	int bno; 		// 글번호
 	private	String title; 	// 제목
 	private String content; // 내용
-	private String writer; 	// 작성자
+	private String nickname; // 작성자
 	private Date regdate; 	// 작성일(등록시간)
 	private int viewcnt; 	// 조회수 
 	private int agree;		// 추천수

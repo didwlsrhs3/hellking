@@ -33,7 +33,7 @@
 			<tr>
 				<td>${list.bno}</td>
 				<td><a href="readPage?bno=${list.bno}">${list.title}</a></td>
-				<td>${list.writer}</td>
+				<td>${list.nickname}</td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}" /></td>
 				<td>${list.viewcnt}</td>
 				<td>${list.agree}</td>
@@ -60,7 +60,7 @@
 			<tr>
 				<td>${list.bno}</td>
 				<td>${list.title}</td>
-				<td>${list.writer}</td>
+				<td>${list.nickname}</td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}" /></td>
 				<td>${list.viewcnt}</td>
 				<td>${list.agree}</td>

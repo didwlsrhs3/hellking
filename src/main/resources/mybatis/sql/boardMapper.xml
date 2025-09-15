@@ -10,8 +10,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<!-- parameterType="net.koreate.hellking.board.dao.BoardDAO" -->
 	<!-- int create(BoardVO board) -->
 	<insert id="create" parameterType="boardVO">
-		INSERT INTO hell_board(title,content,writer) 
-		VALUES(#{title},#{content},#{writer})
+		INSERT INTO hell_board(title,content,nickname) 
+		VALUES(#{title},#{content},#{nickname})
 	</insert>
 	
 	<select id="listCriteria" 

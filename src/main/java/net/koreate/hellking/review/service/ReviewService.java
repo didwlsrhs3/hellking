@@ -21,13 +21,61 @@ public class ReviewService {
     @Autowired
     private UserService userService;
     
-    // 리뷰 작성
+    // 리뷰 작성 - 다중 fallback 전략
     public boolean writeReview(ReviewVO review) {
+        System.out.println("=== ReviewService.writeReview 시작 ===");
+        System.out.println("입력 데이터: " + review.toString());
+        
         try {
-            return reviewDAO.insertReview(review) > 0;
+            // 1차 시도: 기본 insertReview (useGeneratedKeys=true, keyColumn 명시)
+            System.out.println("1차 시도: insertReview (useGeneratedKeys + keyColumn)");
+            int result = reviewDAO.insertReview(review);
+            
+            if (result > 0 && review.getReviewNum() != null) {
+                System.out.println("✅ 1차 성공: reviewNum = " + review.getReviewNum());
+                return true;
+            }
+            
+            System.out.println("1차 실패, 2차 시도로 넘어감");
+            
         } catch (Exception e) {
-            throw new HellkingException("리뷰 작성 중 오류가 발생했습니다: " + e.getMessage());
+            System.out.println("1차 시도 예외: " + e.getMessage());
         }
+        
+        try {
+            // 2차 시도: SelectKey 사용
+            System.out.println("2차 시도: insertReviewWithSelectKey");
+            int result = reviewDAO.insertReviewWithSelectKey(review);
+            
+            if (result > 0 && review.getReviewNum() != null) {
+                System.out.println("✅ 2차 성공: reviewNum = " + review.getReviewNum());
+                return true;
+            }
+            
+            System.out.println("2차 실패, 3차 시도로 넘어감");
+            
+        } catch (Exception e) {
+            System.out.println("2차 시도 예외: " + e.getMessage());
+        }
+        
+        try {
+            // 3차 시도: RETURNING 절 사용 (Oracle 12c+)
+            System.out.println("3차 시도: insertReviewWithReturning");
+            int result = reviewDAO.insertReviewWithReturning(review);
+            
+            if (result > 0 && review.getReviewNum() != null) {
+                System.out.println("✅ 3차 성공: reviewNum = " + review.getReviewNum());
+                return true;
+            }
+            
+            System.out.println("3차 실패");
+            
+        } catch (Exception e) {
+            System.out.println("3차 시도 예외: " + e.getMessage());
+        }
+        
+        System.out.println("❌ 모든 방법 실패");
+        throw new HellkingException("리뷰 작성 중 오류가 발생했습니다. 관리자에게 문의해주세요.");
     }
     
     // 리뷰 수정
@@ -70,24 +118,59 @@ public class ReviewService {
     // 리뷰 상세 조회 (조회수 증가)
     @Transactional
     public ReviewVO getReviewDetail(Long reviewNum, Long currentUserNum) {
-        ReviewVO review = reviewDAO.selectByReviewNum(reviewNum);
-        if (review == null) {
-            throw new HellkingException("존재하지 않는 리뷰입니다.");
-        }
+        System.out.println("=== ReviewService.getReviewDetail 시작 ===");
+        System.out.println("요청된 reviewNum: " + reviewNum);
+        System.out.println("현재 사용자 userNum: " + currentUserNum);
         
-        // 조회수 증가 (본인 리뷰가 아닌 경우에만)
-        if (!review.getUserNum().equals(currentUserNum)) {
-            reviewDAO.increaseViewCount(reviewNum);
-            review.setViewCount(review.getViewCount() + 1);
+        try {
+            ReviewVO review = reviewDAO.selectByReviewNum(reviewNum);
+            System.out.println("DAO 조회 결과: " + (review != null ? "성공" : "실패"));
+            
+            if (review != null) {
+                System.out.println("조회된 리뷰 정보:");
+                System.out.println("- reviewNum: " + review.getReviewNum());
+                System.out.println("- userNum: " + review.getUserNum());
+                System.out.println("- title: " + review.getTitle());
+                System.out.println("- chainNum: " + review.getChainNum());
+            }
+            
+            if (review == null) {
+                System.out.println("리뷰를 찾을 수 없음 - reviewNum: " + reviewNum);
+                throw new HellkingException("리뷰 번호 " + reviewNum + "에 해당하는 리뷰를 찾을 수 없습니다.");
+            }
+            
+            // 조회수 증가 (본인 리뷰가 아닐 경우에만)
+            if (currentUserNum == null || !review.getUserNum().equals(currentUserNum)) {
+                System.out.println("조회수 증가 처리");
+                reviewDAO.increaseViewCount(reviewNum);
+                review.setViewCount(review.getViewCount() + 1);
+            } else {
+                System.out.println("본인 리뷰이므로 조회수 증가 생략");
+            }
+            
+            // 현재 사용자의 좋아요 상태 조회
+            if (currentUserNum != null) {
+                try {
+                    String likeType = reviewDAO.getUserLikeType(reviewNum, currentUserNum);
+                    review.setCurrentUserLikeType(likeType);
+                    System.out.println("사용자 좋아요 상태: " + likeType);
+                } catch (Exception e) {
+                    System.out.println("좋아요 상태 조회 실패: " + e.getMessage());
+                    // 좋아요 상태 조회 실패는 전체 로직에 영향을 주지 않음
+                }
+            }
+            
+            System.out.println("=== ReviewService.getReviewDetail 완료 ===");
+            return review;
+            
+        } catch (HellkingException e) {
+            System.out.println("HellkingException 발생: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.out.println("예상치 못한 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            throw new HellkingException("리뷰 조회 중 오류가 발생했습니다: " + e.getMessage());
         }
-        
-        // 현재 사용자의 좋아요 상태 조회
-        if (currentUserNum != null) {
-            String likeType = reviewDAO.getUserLikeType(reviewNum, currentUserNum);
-            review.setCurrentUserLikeType(likeType);
-        }
-        
-        return review;
     }
     
     // 전체 리뷰 목록
@@ -95,19 +178,25 @@ public class ReviewService {
         if (sortBy == null) sortBy = "latest";
         int offset = (page - 1) * size;
         
-        List<ReviewVO> reviews = reviewDAO.selectAllReviews(sortBy, offset, size);
-        int totalCount = reviewDAO.getTotalReviewCount();
-        int totalPages = (int) Math.ceil((double) totalCount / size);
-        
-        Map<String, Object> result = new HashMap<>();
-        result.put("reviews", reviews);
-        result.put("currentPage", page);
-        result.put("totalPages", totalPages);
-        result.put("totalCount", totalCount);
-        result.put("hasNext", page < totalPages);
-        result.put("hasPrev", page > 1);
-        
-        return result;
+        try {
+            List<ReviewVO> reviews = reviewDAO.selectAllReviews(sortBy, offset, size);
+            int totalCount = reviewDAO.getTotalReviewCount();
+            int totalPages = (int) Math.ceil((double) totalCount / size);
+            
+            Map<String, Object> result = new HashMap<>();
+            result.put("reviews", reviews);
+            result.put("currentPage", page);
+            result.put("totalPages", totalPages);
+            result.put("totalCount", totalCount);
+            result.put("hasNext", page < totalPages);
+            result.put("hasPrev", page > 1);
+            
+            return result;
+        } catch (Exception e) {
+            System.out.println("리뷰 목록 조회 오류: " + e.getMessage());
+            e.printStackTrace();
+            throw new HellkingException("리뷰 목록 조회 중 오류가 발생했습니다: " + e.getMessage());
+        }
     }
     
     // 가맹점별 리뷰
@@ -134,7 +223,13 @@ public class ReviewService {
     
     // 우수 리뷰
     public List<ReviewVO> getExcellentReviews(int limit) {
-        return reviewDAO.selectExcellentReviews(limit);
+        try {
+            return reviewDAO.selectExcellentReviews(limit);
+        } catch (Exception e) {
+            System.out.println("우수 리뷰 조회 오류: " + e.getMessage());
+            // 우수 리뷰 조회 실패시 빈 리스트 반환
+            return new java.util.ArrayList<>();
+        }
     }
     
     // 리뷰 검색
@@ -143,8 +238,15 @@ public class ReviewService {
         
         List<ReviewVO> reviews = reviewDAO.searchReviews(keyword, offset, size);
         
-        // 임시로 전체 개수 조회 (실제로는 검색 결과 카운트 쿼리 추가 필요)
-        int totalCount = reviews.size() < size ? reviews.size() : size * page + 1;
+        // getSearchResultCount 메서드가 없다면 기본 카운트 사용
+        int totalCount;
+        try {
+            totalCount = reviewDAO.getSearchResultCount(keyword);
+        } catch (Exception e) {
+            System.out.println("검색 결과 카운트 조회 실패, 기본값 사용: " + e.getMessage());
+            totalCount = reviews.size() < size ? reviews.size() : size * page + 1;
+        }
+        
         int totalPages = (int) Math.ceil((double) totalCount / size);
         
         Map<String, Object> result = new HashMap<>();
@@ -153,6 +255,8 @@ public class ReviewService {
         result.put("totalPages", totalPages);
         result.put("totalCount", totalCount);
         result.put("keyword", keyword);
+        result.put("hasNext", page < totalPages);
+        result.put("hasPrev", page > 1);
         
         return result;
     }
@@ -168,7 +272,12 @@ public class ReviewService {
     
     // 댓글 목록
     public List<ReviewCommentVO> getComments(Long reviewNum) {
-        return reviewDAO.selectCommentsByReviewNum(reviewNum);
+        try {
+            return reviewDAO.selectCommentsByReviewNum(reviewNum);
+        } catch (Exception e) {
+            System.out.println("댓글 목록 조회 오류: " + e.getMessage());
+            return new java.util.ArrayList<>();
+        }
     }
     
     // 좋아요/싫어요 처리
