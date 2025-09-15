@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" 
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+
+    <display-name>Hellking Fitness System</display-name>
+	    
+	<!-- Spring MVC DispatcherServlet 설정 -->
+	<servlet>
+	    <servlet-name>appServlet</servlet-name>
+	    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	    <init-param>
+	        <param-name>contextConfigLocation</param-name>
+	        <param-value>classpath:spring/appServlet/servlet-context.xml</param-value>
+	    </init-param>
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
+    
+    <servlet-mapping>
+        <servlet-name>appServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+	<!-- Spring Root ApplicationContext 설정 -->
+	<context-param>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>classpath:spring/root-context.xml</param-value>
+	</context-param>
+    
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+    <!-- 인코딩 필터 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- HTTP 메소드 필터 (PUT, DELETE 지원) -->
+    <filter>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- 세션 타임아웃 설정 (30분) -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>false</secure> <!-- 개발 환경에서는 false, 운영에서는 true -->
+        </cookie-config>
+    </session-config>
+    
+    <!-- ======== 에러 페이지 설정 ======== -->
+    
+    <!-- HTTP 상태 코드별 에러 페이지 -->
+    <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/views/error/400.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <error-code>403</error-code>
+        <location>/WEB-INF/views/error/403.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/error/404.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <error-code>405</error-code>
+        <location>/WEB-INF/views/error/405.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <error-code>502</error-code>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <error-code>503</error-code>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+    
+    <!-- 예외 타입별 에러 페이지 -->
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <exception-type>java.lang.RuntimeException</exception-type>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <exception-type>java.sql.SQLException</exception-type>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+    
+    <!-- 헬킹 커스텀 예외 -->
+    <error-page>
+        <exception-type>net.koreate.hellking.common.exception.HellkingException</exception-type>
+        <location>/WEB-INF/views/error/business-error.jsp</location>
+    </error-page>
+    
+    <!-- ======== 보안 설정 ======== -->
+    
+    <!-- MIME 타입 설정 -->
+    <mime-mapping>
+        <extension>js</extension>
+        <mime-type>application/javascript</mime-type>
+    </mime-mapping>
+    
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+    
+    <!-- 환영 페이지 설정 -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    
+    <!-- 보안 제약사항 (선택사항) -->
+    <!-- 
+    <security-constraint>
+        <display-name>Admin Pages</display-name>
+        <web-resource-collection>
+            <web-resource-name>Admin</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    -->
+    
+</web-app>
