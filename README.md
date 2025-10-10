@@ -1,199 +1,130 @@
-# hellking
 
-> Spring MVC 기반의 게시판/회원/파일 관리 웹 애플리케이션
+<p align="center">
+  <h1 style="color:#ff7b00;">🔥 HELLKING 🔥</h1>
+  <p><strong>SPRING MVC COMMUNITY PROJECT</strong></p>
+  <p>Developed by 양진곤</p>
+</p>
 
-## 📖 프로젝트 개요
+---
 
-**hellking** 는 Java Spring MVC + MyBatis 기반으로 구성된 웹 애플리케이션입니다. 
-주요 기능으로는 게시판(자유/비밀/지역), 댓글·답글, 파일 업로드/다운로드, 회원/로그인, 문의/상담, FAQ 등이 포함됩니다.
+## 🏰 프로젝트 개요
+**HELLKING**은 Spring MVC 기반의 커뮤니티 웹 애플리케이션으로,  
+자유게시판 · 비밀게시판 · 지역게시판 · 댓글 · 파일 업로드/다운로드 · 회원관리 · 문의/상담 등  
+다양한 기능을 하나의 통합 플랫폼으로 제공합니다.  
 
-## ⚙️ 기술 스택
+> **목표:** 안정적인 MVC 구조와 명확한 계층 분리를 통해 유지보수성과 확장성을 확보한 커뮤니티 서비스
 
-- **Language**: Java
-- **Framework**: Spring MVC, MyBatis
-- **View**: JSP, JSTL
-- **Server**: Apache Tomcat
-- **Database**: Oracle (SQL 스크립트 포함 시 적용)
-- **Build**: Maven (pom.xml)
-
-## 🧱 프로젝트 구조
-
-아래는 주요 디렉토리 트리 요약입니다.
-
-```text
-hellking_extracted/
-├── .apt_generated/
-├── .apt_generated_tests/
-├── .settings/
-│   ├── org.eclipse.jdt.apt.core.prefs
-│   ├── org.eclipse.jdt.core.prefs
-│   ├── org.eclipse.ltk.core.refactoring.prefs
-│   ├── org.eclipse.m2e.core.prefs
-│   ├── org.eclipse.wst.common.component
-│   ├── org.eclipse.wst.common.project.facet.core.xml
-│   ├── org.eclipse.wst.validation.prefs
-│   ├── org.springframework.ide.eclipse.beans.core.prefs
-│   ├── org.springframework.ide.eclipse.core.prefs
-│   └── org.springframework.ide.eclipse.prefs
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── net/
-│   │   ├── resources/
-│   │   │   ├── META-INF/
-│   │   │   ├── mybatis/
-│   │   │   ├── prop/
-│   │   │   ├── spring/
-│   │   │   └── log4j.xml
-│   │   └── webapp/
-│   │       ├── resources/
-│   │       ├── upload/
-│   │       └── WEB-INF/
-│   └── test/
-│       ├── java/
-│       │   └── net/
-│       └── resources/
-│           └── log4j.xml
-├── target/
-│   ├── classes/
-│   │   ├── mybatis/
-│   │   │   └── sql/
-│   │   ├── net/
-│   │   │   └── koreate/
-│   │   ├── prop/
-│   │   │   ├── application.properties
-│   │   │   ├── db.properties
-│   │   │   ├── mail.properties
-│   │   │   ├── payment.properties
-│   │   │   └── sms.properties
-│   │   ├── spring/
-│   │   │   ├── appServlet/
-│   │   │   └── root-context.xml
-│   │   └── log4j.xml
-│   ├── m2e-wtp/
-│   │   └── web-resources/
-│   │       └── META-INF/
-│   └── test-classes/
-│       ├── net/
-│       │   └── koreate/
-│       └── log4j.xml
-├── .classpath
-├── .factorypath
-├── .project
-├── .springBeans
-├── hk_board.sql
-├── hk_chain.sql
-├── hk_designbody.sql
-├── hk_food.sql
-├── hk_pass.sql
-├── hk_program.sql
-├── hk_qr.sql
-├── hk_review.sql
-├── hk_support.sql
-├── hk_user.sql
-└── pom.xml
-```
-
-## 🧩 주요 설정 파일
-
-- `pom.xml` — Maven 의존성 및 빌드 설정
-- `WEB-INF/web.xml` — 서블릿, 필터, 리스너 및 디스패처 설정
-- MyBatis 매퍼:
-  - `src/main/resources/mybatis/sql/boardMapper.xml`
-  - `src/main/resources/mybatis/sql/commentMapper.xml`
-  - `src/main/resources/mybatis/sql/localMapper.xml`
-  - `src/main/resources/mybatis/sql/secretMapper.xml`
+---
 
 ## ✨ 주요 기능
+| 구분 | 설명 |
+|------|------|
+| 📰 자유/비밀/지역 게시판 | 게시판 CRUD, 페이징, 검색, 정렬, 파일 첨부 기능 |
+| 💬 댓글 & 답글 | 계층형 댓글 구조, 로그인 사용자 식별, 본인 확인 버튼 제어 |
+| 📂 파일 업/다운로드 | 업로드 시 중복 방지 및 파일명 인코딩 처리 |
+| 👤 회원 관리 | 회원가입, 로그인, 세션 인증, 권한 기반 접근 제어 |
+| 🧾 문의/상담 관리 | 문의글 작성 및 상담 요청 관리 (관리자용 포함) |
+| 🧠 FAQ | 자주 묻는 질문 등록/조회/검색 |
+| 🏪 체인 관리 | 매장/지점 정보 등록 및 조회 기능 (hk_chain) |
+| 📊 관리자 모드 | 회원·게시글·상담 현황 관리 및 통계 |
 
-- FAQ
-- 문의/상담
-- 비밀게시판
-- 자유게시판
-- 지역게시판
-- 체인/지점
-- 파일 업/다운로드
-- 회원/로그인
+---
 
-## 📦 패키지 및 레이어
+## ⚙️ 기술 스택
+| 구분 | 기술 |
+|------|------|
+| Language | Java 11 |
+| Framework | Spring MVC, MyBatis |
+| View | JSP, JSTL, CSS |
+| Server | Apache Tomcat 9 |
+| Database | Oracle 21c |
+| Build Tool | Maven |
+| IDE | Spring Tool Suite 3 (STS3) |
 
-- Controller: 20개
-- Service: 28개
-- DAO/Repository: 23개
-- VO: 39개
+---
 
-주요 패키지(상위 10개):
-- `net.koreate.hellking.board.dao`: 8 파일
-- `net.koreate.hellking.board.service`: 8 파일
-- `net.koreate.hellking.common.utils`: 8 파일
-- `net.koreate.hellking.fooddiary.vo`: 8 파일
-- `net.koreate.hellking.board.util`: 6 파일
-- `net.koreate.hellking.support.vo`: 6 파일
-- `net.koreate.hellking.board.vo`: 5 파일
-- `net.koreate.hellking.common.config`: 5 파일
-- `net.koreate.hellking.common.service`: 5 파일
-- `net.koreate.hellking.support.dao`: 5 파일
+## 🧱 프로젝트 구조
+```text
+hellking/
+├── src/
+│   ├── main/java/net/koreate/hellking/
+│   │   ├── board/        # 게시판, 댓글, 파일 관련 로직
+│   │   ├── user/         # 회원 로그인/가입 서비스
+│   │   ├── support/      # 문의, 상담, FAQ
+│   │   └── chain/        # 체인/지점 관리
+│   ├── resources/
+│   │   └── mybatis/sql/  # MyBatis 매퍼 XML
+│   └── webapp/WEB-INF/views/
+│       ├── board/        # 게시판 JSP
+│       ├── user/         # 회원 관련 JSP
+│       ├── support/      # 문의/FAQ JSP
+│       └── common/       # header, footer, error 페이지
+├── pom.xml               # Maven 빌드 설정
+├── web.xml               # 서블릿/필터 매핑
+└── README.md
+```
 
-## 🖼️ View & 정적 리소스
+---
 
-- JSP Views (총 87개): 예) `src/main/webapp/WEB-INF/views/home.jsp` 등
-- CSS 파일 (총 5개): 예) `src/main/webapp/resources/css/boardstyle.css` 등
+## 💾 데이터베이스 구조
+**DB:** Oracle 21c  
 
-## 💾 데이터베이스
+대표 테이블 구성 예시:
+| 테이블명 | 설명 |
+|-----------|------|
+| `hk_users` | 회원 정보 저장 |
+| `hell_board` | 게시판 메인 테이블 |
+| `hell_comment` | 댓글/답글 테이블 |
+| `hk_inquiry`, `hk_consultation` | 문의 및 상담 데이터 |
+| `hk_faq` | FAQ 게시판 |
+| `hk_chains` | 체인/지점 정보 |
 
-- 포함된 SQL 스크립트 (총 10개):
-  - `hk_board.sql`
-  - `hk_chain.sql`
-  - `hk_designbody.sql`
-  - `hk_food.sql`
-  - `hk_pass.sql`
-  - `hk_program.sql`
-  - `hk_qr.sql`
-  - `hk_review.sql`
-  - `hk_support.sql`
-  - `hk_user.sql`
+> 모든 테이블은 **`user_id` 또는 `user_num`** 을 외래키로 연결하여 사용자 참조 무결성을 보장합니다.
+
+---
 
 ## 🚀 실행 방법
-
-- 1. **환경 준비**
-   - JDK 11 이상 설치
-   - Apache Tomcat 9.x 설치
-   - Maven 3.x 설치 (필요 시)
-2. **DB 설정**
-   - 데이터베이스 생성 (예: Oracle 21c 또는 MySQL 8.x)
-   - 제공된 SQL 스크립트가 있다면 실행하여 스키마/테이블 생성
-   - `datasource` 설정을 프로젝트의 Spring/MyBatis 설정 파일에서 실제 DB 접속 정보로 수정
+1. **환경 준비**
+   - JDK 11 이상, Apache Tomcat 9.x, Oracle 21c 설치
+2. **DB 세팅**
+   - `sql/` 폴더 내 초기화 스크립트 실행
+   - `root-context.xml` 또는 `mybatis-context.xml`에서 DB 연결 정보 수정
 3. **프로젝트 Import**
-   - STS3 / Eclipse: `File > Import > Existing Maven Projects` 로 가져오기
-4. **서버 등록 및 실행**
-   - STS3: `Servers` 뷰에서 Tomcat 9 추가 → 프로젝트 Add → Run
-   - 또는 `mvn clean package` 후 생성된 WAR를 Tomcat `webapps/`에 배포
-5. **접속**
-   - 기본 컨텍스트 기준: `http://localhost:8080/<context-path>`
+   - STS3 → *File > Import > Existing Maven Projects* 선택
+4. **서버 배포 및 실행**
+   - Tomcat Run → `http://localhost:8080/hellking` 접속
+
+---
 
 ## 🌐 대표 URL 예시
+| 경로 | 설명 |
+|------|------|
+| `/board/freeboard` | 자유게시판 |
+| `/board/secretboard` | 비밀게시판 |
+| `/board/localboard` | 지역게시판 |
+| `/user/login`, `/user/join` | 로그인/회원가입 |
+| `/board/download` | 파일 다운로드 |
+| `/support/inquiry` | 문의글 작성/조회 |
 
-- `/board/freeboard` — 자유게시판 목록/조회/작성
-- `/board/secretboard` — 비밀게시판
-- `/board/localboard` — 지역게시판
-- `/user/login`, `/user/join` — 로그인/회원가입
-- `/board/download` — 파일 다운로드
+---
 
-> 실제 URL은 Controller 매핑에 따라 다를 수 있으니 `controller` 코드를 참고하세요.
+## 🧰 빌드 정보
+- **groupId:** `net.koreate`
+- **artifactId:** `hellking`
+- **version:** `1.0.0-BUILD-SNAPSHOT`
 
-## 🧰 빌드 & 의존성
+주요 의존성:
+- spring-webmvc, spring-jdbc, mybatis-spring, oracle-driver, jstl, commons-fileupload 등
 
-- groupId: `net.koreate`
-- artifactId: `hellking`
-- version: `1.0.0-BUILD-SNAPSHOT`
-- properties:
-  - `java-version`: 11
-  - `org.springframework-version`: 5.3.39
-  - `org.aspectj-version`: 1.9.24
-  - `org.slf4j-version`: 2.0.17
-  - `jackson.version`: 2.19.2
-  - `httpclient.version`: 4.5.14
+---
 
-## 👤 개발자
+## 👑 개발자 정보
+**Developed by 양진곤**  
+**Developed by 이지황**  
+**Developed by 이희승**  
 
-- Author: 양진곤, 이지황!, 이희승
+> 지속적인 개선과 유지보수를 목표로 하는 Spring MVC 기반 포트폴리오 프로젝트입니다.
+
+---
+
+<p align="center" style="color:#ff7b00;">© 2025 HELLKING PROJECT. All Rights Reserved.</p>
