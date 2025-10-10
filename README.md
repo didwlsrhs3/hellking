@@ -194,15 +194,6 @@ hellking_extracted/
   - `jackson.version`: 2.19.2
   - `httpclient.version`: 4.5.14
 
-## 📸 스크린샷 (선택)
-
-`/docs/screenshots/` 경로에 PNG들을 추가하면 아래와 같이 표시할 수 있습니다.
-
-```markdown
-![메인 페이지](docs/screenshots/home.png)
-![게시글 읽기](docs/screenshots/board_read.png)
-```
-
 ## 🤝 기여 & 라이선스
 
 - Pull Request / Issue 환영합니다.
