@@ -3,6 +3,8 @@
   <h1 style="color:#ff7b00;">🔥 HELLKING 🔥</h1>
   <p><strong>SPRING MVC COMMUNITY PROJECT</strong></p>
   <p>Developed by 양진곤</p>
+  <p>Developed by 이지황</p>
+  <p>Developed by 이희승</p>
 </p>
 
 ---
