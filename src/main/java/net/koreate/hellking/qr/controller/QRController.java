@@ -162,9 +162,70 @@ public class QRController {
         
         Long userNum = userService.getCurrentUserNum(session);
         
+<<<<<<< HEAD
         List<QRVisitVO> visits = qrService.getUserVisits(userNum);
         Map<String, Object> stats = qrService.getUserVisitStats(userNum);
         
+=======
+        // 디버깅용 로그 추가
+        System.out.println("=== 현재 로그인된 userNum: " + userNum + " ===");
+        
+        // 세션 정보도 확인
+        System.out.println("세션 userNum: " + session.getAttribute("userNum"));
+        System.out.println("세션 userId: " + session.getAttribute("userId"));
+        System.out.println("세션 userInfo: " + session.getAttribute("userInfo"));
+        
+        List<QRVisitVO> visits = qrService.getUserVisits(userNum);
+        
+        System.out.println("=== DEBUG: visits 데이터 확인 ===");
+        System.out.println("총 방문 기록 수: " + visits.size());
+        for (QRVisitVO visit : visits) {
+            System.out.println("chainName: " + visit.getChainName());
+            System.out.println("result: " + visit.getResult());
+            System.out.println("resultText: " + visit.getResultText());
+            System.out.println("visitTime: " + visit.getVisitTime());
+            System.out.println("chainNum: " + visit.getChainNum());
+            System.out.println("---");
+        }
+        
+        Map<String, Object> stats = qrService.getUserVisitStats(userNum);
+        
+        // === 차트 데이터 디버깅 추가 ===
+        System.out.println("=== 차트 데이터 확인 ===");
+        Object topChains = stats.get("topChains");
+        System.out.println("topChains 타입: " + (topChains != null ? topChains.getClass() : "null"));
+        System.out.println("topChains 내용: " + topChains);
+
+        if (topChains instanceof List) {
+            List<?> list = (List<?>) topChains;
+            System.out.println("topChains 크기: " + list.size());
+            for (int i = 0; i < list.size(); i++) {
+                Object item = list.get(i);
+                System.out.println("--- Chain " + i + " ---");
+                System.out.println("차트 항목 타입: " + (item != null ? item.getClass() : "null"));
+                System.out.println("차트 항목 내용: " + item);
+                
+                if (item instanceof Map) {
+                    Map<?, ?> chainMap = (Map<?, ?>) item;
+                    System.out.println("Map 키 목록: " + chainMap.keySet());
+                    
+                    // 모든 가능한 키로 값 확인
+                    for (Object key : chainMap.keySet()) {
+                        Object value = chainMap.get(key);
+                        System.out.println("  " + key + " (" + (key != null ? key.getClass().getSimpleName() : "null") + ") = " + value + " (" + (value != null ? value.getClass().getSimpleName() : "null") + ")");
+                    }
+                    
+                    // JSP에서 사용하는 키들 직접 확인
+                    System.out.println("체크: chain_name = " + chainMap.get("chain_name"));
+                    System.out.println("체크: CHAIN_NAME = " + chainMap.get("CHAIN_NAME"));
+                    System.out.println("체크: visit_count = " + chainMap.get("visit_count"));
+                    System.out.println("체크: VISIT_COUNT = " + chainMap.get("VISIT_COUNT"));
+                }
+            }
+        }
+        System.out.println("=== 차트 데이터 확인 완료 ===");
+        
+>>>>>>> b65c320 (Initial commit)
         model.addAttribute("visits", visits);
         model.addAttribute("stats", stats);
         
@@ -206,4 +267,46 @@ public class QRController {
         
         return "qr/admin/dashboard";
     }
+<<<<<<< HEAD
+=======
+    
+    /**
+     * 가맹점 QR 코드 생성
+     */
+    @PostMapping("generateChainQR")
+    @ResponseBody
+    public Map<String, Object> generateChainQR(String chainCode, HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        
+        try {
+            Long userNum = userService.getCurrentUserNum(session);
+            if (userNum == null) {
+                result.put("success", false);
+                result.put("message", "로그인이 필요합니다.");
+                return result;
+            }
+            
+            // 체인 코드 검증
+            if (chainCode == null || chainCode.trim().isEmpty()) {
+                result.put("success", false);
+                result.put("message", "가맹점 코드를 입력해주세요.");
+                return result;
+            }
+            
+            // QR 코드 생성 (단순히 체인 코드를 QR로 변환)
+            String qrCodeBase64 = qrService.generateChainQRCodeBase64(chainCode.trim().toUpperCase());
+            
+            result.put("success", true);
+            result.put("qrCode", qrCodeBase64);
+            result.put("chainCode", chainCode);
+            result.put("message", chainCode + " 가맹점 QR 코드가 생성되었습니다.");
+            
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "QR 코드 생성에 실패했습니다.");
+        }
+        
+        return result;
+    }
+>>>>>>> b65c320 (Initial commit)
 }

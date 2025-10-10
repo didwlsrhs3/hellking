@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="commentMapper">
+
+    <!-- 댓글 등록 (원댓글) -->
+    <insert id="addComment" parameterType="net.koreate.hellking.board.vo.CommentVO">
+        INSERT INTO hell_comment (cno, bno, content, username, regdate, updatedate, parent_cno) 
+        VALUES (hell_comment_seq.NEXTVAL, #{bno}, #{content}, #{username}, SYSDATE, SYSDATE, NULL)
+    </insert>
+
+    <!-- 답글 등록 -->
+    <insert id="addReply" parameterType="net.koreate.hellking.board.vo.CommentVO">
+        INSERT INTO hell_comment (cno, bno, content, username, regdate, updatedate, parent_cno)
+        VALUES (hell_comment_seq.NEXTVAL, #{bno}, #{content}, #{username}, SYSDATE, SYSDATE, #{parentCno})
+    </insert>
+
+    <!-- 댓글 수정 -->
+    <update id="updateComment" parameterType="net.koreate.hellking.board.vo.CommentVO">
+        UPDATE hell_comment
+        SET content = #{content},
+            updatedate = SYSDATE
+        WHERE cno = #{cno}
+    </update>
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteComment" parameterType="int">
+        DELETE FROM hell_comment
+        WHERE cno = #{cno}
+    </delete>
+
+	<!-- 특정 게시글 댓글 목록 (부모 먼저, 그 다음 답글) -->
+	<select id="listComment" parameterType="int" resultType="net.koreate.hellking.board.vo.CommentVO">
+	    SELECT cno, bno, content, username, regdate, updatedate, parent_cno AS parentCno, LEVEL AS depth -- 댓글 깊이 (1 = 부모, 2 = 자식, ...)
+	    FROM hell_comment
+	    WHERE bno = #{bno}
+	    START WITH parent_cno IS NULL       
+	    CONNECT BY PRIOR cno = parent_cno     
+	    ORDER SIBLINGS BY regdate ASC        
+	</select>
+
+
+</mapper>

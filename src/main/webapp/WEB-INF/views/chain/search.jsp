@@ -8,11 +8,28 @@
     <title>가맹점 검색 - 헬킹 피트니스</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+<<<<<<< HEAD
         .search-header {
             background: linear-gradient(135deg, #FF6A00, #ff8533);
             color: white;
             padding: 40px 0;
         }
+=======
+        :root {
+            --brand: #FF6A00;
+            --bg-cream: #F4ECDC;
+        }
+        body { 
+            background: white; 
+        }
+        
+        .search-header {
+            background: linear-gradient(135deg, #FF6A00, #ff8533);
+            color: white;
+            padding: 60px 0;
+        }
+        
+>>>>>>> b65c320 (Initial commit)
         .chain-card {
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -34,7 +51,16 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h2 class="fw-bold">가맹점 검색</h2>
+<<<<<<< HEAD
                     <p class="lead mb-0">원하는 가맹점을 찾아보세요</p>
+=======
+                    <p class="lead">원하는 가맹점을 찾아보세요</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-light btn-lg">
+                        <i class="fas fa-search me-2"></i>고급 검색
+                    </button>
+>>>>>>> b65c320 (Initial commit)
                 </div>
             </div>
         </div>
@@ -48,7 +74,11 @@
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control" name="keyword" 
                                placeholder="가맹점명 또는 지역으로 검색하세요..." 
+<<<<<<< HEAD
                                value="${searchVO.keyword}">
+=======
+                               value="${keyword}">
+>>>>>>> b65c320 (Initial commit)
                         <button class="btn btn-primary" type="submit">
                             <i class="fas fa-search"></i> 검색
                         </button>
@@ -57,6 +87,7 @@
             </div>
         </div>
         
+<<<<<<< HEAD
         <!-- 검색 결과 -->
         <c:if test="${not empty searchVO.keyword}">
             <div class="row mb-4">
@@ -74,6 +105,28 @@
                         
                         <input type="radio" class="btn-check" name="sortOptions" id="rating" value="rating">
                         <label class="btn btn-outline-primary" for="rating">평점순</label>
+=======
+        <!-- 검색 결과 표시 - keyword가 있으면 무조건 검색 결과 영역 표시 -->
+        <c:if test="${not empty keyword}">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h4>"${keyword}" 검색 결과</h4>
+                    <p class="text-muted">총 ${totalCount}개의 가맹점을 찾았습니다</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="btn-group" role="group">
+                        <input type="radio" class="btn-check" name="sortOptions" id="relevance" value="rating_desc" 
+                               ${sortBy == 'rating_desc' ? 'checked' : ''}>
+                        <label class="btn btn-outline-primary" for="relevance">평점순</label>
+                        
+                        <input type="radio" class="btn-check" name="sortOptions" id="name" value="name"
+                               ${sortBy == 'name' ? 'checked' : ''}>
+                        <label class="btn btn-outline-primary" for="name">이름순</label>
+                        
+                        <input type="radio" class="btn-check" name="sortOptions" id="rating" value="review_desc"
+                               ${sortBy == 'review_desc' ? 'checked' : ''}>
+                        <label class="btn btn-outline-primary" for="rating">리뷰순</label>
+>>>>>>> b65c320 (Initial commit)
                     </div>
                 </div>
             </div>
@@ -81,8 +134,13 @@
             <!-- 검색 결과 목록 -->
             <div class="row">
                 <c:choose>
+<<<<<<< HEAD
                     <c:when test="${not empty searchResult.chains}">
                         <c:forEach var="chain" items="${searchResult.chains}">
+=======
+                    <c:when test="${not empty chains}">
+                        <c:forEach var="chain" items="${chains}">
+>>>>>>> b65c320 (Initial commit)
                             <div class="col-lg-6 mb-4">
                                 <div class="card chain-card h-100">
                                     <div class="row g-0 h-100">
@@ -138,6 +196,7 @@
             </div>
             
             <!-- 페이징 -->
+<<<<<<< HEAD
             <c:if test="${searchResult.totalPages > 1}">
                 <nav aria-label="검색 결과 페이지네이션">
                     <ul class="pagination justify-content-center">
@@ -158,6 +217,26 @@
                         <c:if test="${searchResult.hasNext}">
                             <li class="page-item">
                                 <a class="page-link" href="?keyword=${searchVO.keyword}&page=${searchResult.currentPage + 1}">다음</a>
+=======
+            <c:if test="${totalPages > 1}">
+                <nav aria-label="검색 결과 페이지네이션">
+                    <ul class="pagination justify-content-center">
+                        <c:if test="${hasPrev}">
+                            <li class="page-item">
+                                <a class="page-link" href="?keyword=${keyword}&page=${currentPage - 1}">이전</a>
+                            </li>
+                        </c:if>
+                        
+                        <c:forEach begin="${pageNav.startPage}" end="${pageNav.endPage}" var="pageNum">
+                            <li class="page-item ${pageNum == currentPage ? 'active' : ''}">
+                                <a class="page-link" href="?keyword=${keyword}&page=${pageNum}">${pageNum}</a>
+                            </li>
+                        </c:forEach>
+                        
+                        <c:if test="${hasNext}">
+                            <li class="page-item">
+                                <a class="page-link" href="?keyword=${keyword}&page=${currentPage + 1}">다음</a>
+>>>>>>> b65c320 (Initial commit)
                             </li>
                         </c:if>
                     </ul>
@@ -165,8 +244,13 @@
             </c:if>
         </c:if>
         
+<<<<<<< HEAD
         <!-- 검색어가 없는 경우 -->
         <c:if test="${empty searchVO.keyword}">
+=======
+        <!-- 검색어가 없는 경우에만 이 메시지 표시 -->
+        <c:if test="${empty keyword}">
+>>>>>>> b65c320 (Initial commit)
             <div class="text-center py-5">
                 <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
                 <h5 class="text-muted">검색어를 입력해주세요</h5>
@@ -179,7 +263,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+<<<<<<< HEAD
         // 빠른 QR 입장 기능
+=======
+>>>>>>> b65c320 (Initial commit)
         function quickEnter(chainCode) {
             if(confirm('이 가맹점에 입장하시겠습니까?')) {
                 fetch('${pageContext.request.contextPath}/qr/enter', {
@@ -197,7 +284,10 @@
             }
         }
         
+<<<<<<< HEAD
         // 정렬 변경
+=======
+>>>>>>> b65c320 (Initial commit)
         document.querySelectorAll('input[name="sortOptions"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 const url = new URL(window.location);

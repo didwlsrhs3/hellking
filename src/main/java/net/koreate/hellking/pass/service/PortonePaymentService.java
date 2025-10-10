@@ -48,9 +48,27 @@ public class PortonePaymentService implements PaymentService {
             throw new Exception("사용자 또는 패스권 정보를 찾을 수 없습니다.");
         }
         
+<<<<<<< HEAD
         String merchantUid = "HK_" + System.currentTimeMillis() + "_" + userNum;
         System.out.println("생성된 주문번호: " + merchantUid);
         
+=======
+        // NULL 값 처리 - PaymentVO 설정 BEFORE
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            user.setEmail("guest@hellking.com"); // 기본 이메일
+        }
+        if (user.getPhone() == null || user.getPhone().trim().isEmpty()) {
+            user.setPhone("010-0000-0000"); // 기본 전화번호
+        }
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            user.setUsername("게스트"); // 기본 사용자명
+        }
+        
+        String merchantUid = "HK_" + System.currentTimeMillis() + "_" + userNum;
+        System.out.println("생성된 주문번호: " + merchantUid);
+        
+        // PaymentVO 설정 - NULL 처리 후에 실행
+>>>>>>> b65c320 (Initial commit)
         PaymentVO payment = new PaymentVO();
         payment.setUserNum(userNum);
         payment.setMerchantUid(merchantUid);
@@ -66,6 +84,11 @@ public class PortonePaymentService implements PaymentService {
         System.out.println("amount: " + payment.getAmount());
         System.out.println("status: " + payment.getStatus());
         System.out.println("buyerName: " + payment.getBuyerName());
+<<<<<<< HEAD
+=======
+        System.out.println("buyerEmail: " + payment.getBuyerEmail());
+        System.out.println("buyerTel: " + payment.getBuyerTel());
+>>>>>>> b65c320 (Initial commit)
         
         int result = passDAO.insertPayment(payment);
         System.out.println("결제 정보 DB 저장 결과: " + result);

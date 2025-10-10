@@ -8,11 +8,24 @@
     <title>리뷰 검색 - 헬킹 피트니스</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+<<<<<<< HEAD
         .search-header {
             background: linear-gradient(135deg, #6f42c1, #e83e8c);
             color: white;
             padding: 40px 0;
         }
+=======
+        body { 
+            background: white; 
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: white;
+            padding: 60px 0;
+        }
+        
+>>>>>>> b65c320 (Initial commit)
         .review-card {
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -33,13 +46,30 @@
 <body>
     <jsp:include page="../common/header.jsp" />
     
+<<<<<<< HEAD
     <!-- 검색 헤더 -->
     <div class="search-header">
+=======
+    <!-- 리뷰 검색 헤더 -->
+    <div class="page-header">
+>>>>>>> b65c320 (Initial commit)
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h2 class="fw-bold">리뷰 검색</h2>
+<<<<<<< HEAD
                     <p class="lead mb-0">원하는 리뷰를 찾아보세요</p>
+=======
+                    <p class="lead">원하는 리뷰를 찾아보세요</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <c:if test="${not empty searchResult.keyword}">
+                        <div class="text-center p-3" style="background: rgba(255,255,255,0.2); border-radius: 12px;">
+                            <div class="h4 mb-1">${searchResult.totalCount}</div>
+                            <small>검색 결과</small>
+                        </div>
+                    </c:if>
+>>>>>>> b65c320 (Initial commit)
                 </div>
             </div>
         </div>

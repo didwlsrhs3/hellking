@@ -77,9 +77,16 @@ public interface PassDAO {
     int updateExpiredPasses();
     
     // === 환불 관리 ===
+<<<<<<< HEAD
     @Insert("INSERT INTO hk_refunds (user_pass_num, refund_amount, reason, status) " +
             "VALUES (#{userPassNum, jdbcType=NUMERIC}, #{refundAmount, jdbcType=NUMERIC}, #{reason}, 'REQUESTED')")
     int insertRefund(RefundVO refund);
+=======
+    @Insert("INSERT INTO hk_refunds (user_pass_num, refund_amount, reason, status, bank_name, account_number, account_holder) " +
+            "VALUES (#{userPassNum, jdbcType=NUMERIC}, #{refundAmount, jdbcType=NUMERIC}, #{reason}, 'REQUESTED', " +
+            "#{bankName, jdbcType=VARCHAR}, #{encryptedAccountNumber, jdbcType=VARCHAR}, #{encryptedAccountHolder, jdbcType=VARCHAR})")
+    int insertRefundWithAccount(RefundVO refund);
+>>>>>>> b65c320 (Initial commit)
     
     @Select("SELECT r.refund_num as refundNum, r.user_pass_num as userPassNum, " +
             "r.refund_amount as refundAmount, r.reason, r.status, r.request_date as requestDate, " +
@@ -92,24 +99,88 @@ public interface PassDAO {
             "ORDER BY r.request_date DESC")
     List<RefundVO> selectRefundsByUserNum(Long userNum);
     
+<<<<<<< HEAD
     @Select("SELECT r.refund_num as refundNum, r.user_pass_num as userPassNum, " +
             "r.refund_amount as refundAmount, r.reason, r.status, r.request_date as requestDate, " +
             "up.pass_num as passNum, p.pass_name as passName, u.username " +
+=======
+    @Select("SELECT refund_num as refundNum, user_pass_num as userPassNum, " +
+            "refund_amount as refundAmount, reason, status, request_date as requestDate " +
+            "FROM hk_refunds WHERE refund_num = #{refundNum, jdbcType=NUMERIC}")
+    RefundVO selectRefundByNum(Long refundNum);
+    
+    @Select("SELECT r.refund_num as refundNum, r.user_pass_num as userPassNum, " +
+            "r.refund_amount as refundAmount, r.reason, r.status, r.request_date as requestDate, " +
+            "r.process_date as processDate, r.reject_reason as rejectReason, " +
+            "r.bank_name as bankName, r.account_number as accountNumber, r.account_holder as accountHolder, " +
+            "up.pass_num as passNum, p.pass_name as passName, u.username, p.price as originalPrice " +
+>>>>>>> b65c320 (Initial commit)
             "FROM hk_refunds r " +
             "JOIN hk_user_passes up ON r.user_pass_num = up.user_pass_num " +
             "JOIN hk_passes p ON up.pass_num = p.pass_num " +
             "JOIN hk_users u ON up.user_num = u.user_num " +
             "ORDER BY r.request_date DESC")
+<<<<<<< HEAD
     List<RefundVO> selectAllRefunds();
     
     @Update("UPDATE hk_refunds SET status = #{status}, process_date = SYSDATE, reject_reason = #{rejectReason} " +
+=======
+    List<RefundVO> selectAllRefundsWithAccount();
+        
+    // 관리자용 - 계좌 정보 포함 환불 상세 조회
+    @Select("SELECT r.refund_num as refundNum, r.user_pass_num as userPassNum, " +
+            "r.refund_amount as refundAmount, r.reason, r.status, r.request_date as requestDate, " +
+            "r.process_date as processDate, r.reject_reason as rejectReason, " +
+            "r.bank_name as bankName, r.account_number as accountNumber, r.account_holder as accountHolder, " +
+            "up.pass_num as passNum, p.pass_name as passName, u.username, u.user_id as userId " +
+            "FROM hk_refunds r " +
+            "JOIN hk_user_passes up ON r.user_pass_num = up.user_pass_num " +
+            "JOIN hk_passes p ON up.pass_num = p.pass_num " +
+            "JOIN hk_users u ON up.user_num = u.user_num " +
+            "WHERE r.refund_num = #{refundNum, jdbcType=NUMERIC}")
+    RefundVO selectRefundWithAccountByNum(Long refundNum);
+    
+ // 환불 완료 후 계좌 정보 삭제 (개인정보 보호)
+    @Update("UPDATE hk_refunds SET account_number = NULL, account_holder = NULL " +
+            "WHERE refund_num = #{refundNum, jdbcType=NUMERIC} AND status = 'COMPLETED'")
+    int deleteAccountInfo(Long refundNum);
+    
+    // 완료된 환불 중 30일 지난 것들의 계좌 정보 일괄 삭제
+    @Update("UPDATE hk_refunds SET account_number = NULL, account_holder = NULL " +
+            "WHERE status = 'COMPLETED' AND process_date <= SYSDATE - 30 " +
+            "AND (account_number IS NOT NULL OR account_holder IS NOT NULL)")
+    int batchDeleteExpiredAccountInfo();
+
+    // 계좌 정보 삭제 대상 조회 (배치 처리용)
+    @Select("SELECT refund_num as refundNum, process_date as processDate " +
+            "FROM hk_refunds " +
+            "WHERE status = 'COMPLETED' AND process_date <= SYSDATE - 30 " +
+            "AND (account_number IS NOT NULL OR account_holder IS NOT NULL)")
+    List<RefundVO> selectAccountInfoToDelete();
+    
+    @Insert("INSERT INTO hk_admin_logs (admin_id, action, target_type, target_id, client_ip, additional_info) " +
+            "VALUES (#{adminId}, #{action}, #{targetType}, #{targetId}, #{clientIp}, #{additionalInfo, jdbcType=VARCHAR})")
+    int insertAdminLog(@Param("adminId") String adminId, @Param("action") String action, 
+                       @Param("targetType") String targetType, @Param("targetId") String targetId,
+                       @Param("clientIp") String clientIp, @Param("additionalInfo") String additionalInfo);
+    
+ // 수정된 코드 (rejectReason에 jdbcType=VARCHAR 추가)
+    @Update("UPDATE hk_refunds SET status = #{status}, process_date = SYSDATE, reject_reason = #{rejectReason, jdbcType=VARCHAR} " +
+>>>>>>> b65c320 (Initial commit)
             "WHERE refund_num = #{refundNum, jdbcType=NUMERIC}")
     int updateRefundStatus(@Param("refundNum") Long refundNum, @Param("status") String status, 
                           @Param("rejectReason") String rejectReason);
     
+<<<<<<< HEAD
     // === 결제 관리 (개선된 버전) ===
     @Insert("INSERT INTO hk_payments (user_num, merchant_uid, amount, status, buyer_name, buyer_email, buyer_tel) " +
             "VALUES (#{userNum, jdbcType=NUMERIC}, #{merchantUid}, #{amount, jdbcType=NUMERIC}, #{status}, #{buyerName}, #{buyerEmail}, #{buyerTel})")
+=======
+ // 수정된 코드 (NULL 값 처리를 위한 jdbcType 추가)
+    @Insert("INSERT INTO hk_payments (user_num, merchant_uid, amount, status, buyer_name, buyer_email, buyer_tel) " +
+            "VALUES (#{userNum, jdbcType=NUMERIC}, #{merchantUid}, #{amount, jdbcType=NUMERIC}, " +
+            "#{status}, #{buyerName, jdbcType=VARCHAR}, #{buyerEmail, jdbcType=VARCHAR}, #{buyerTel, jdbcType=VARCHAR})")
+>>>>>>> b65c320 (Initial commit)
     int insertPayment(PaymentVO payment);
     
     // merchant_uid 기반 업데이트 (가장 많이 사용)

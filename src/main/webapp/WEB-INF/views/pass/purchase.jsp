@@ -9,11 +9,24 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <style>
+<<<<<<< HEAD
         :root {
             --bg-cream: #F4ECDC;
             --brand: #FF6A00;
         }
         body { background: var(--bg-cream); }
+=======
+        body { 
+            background: white; 
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 60px 0;
+        }
+        
+>>>>>>> b65c320 (Initial commit)
         .purchase-container {
             max-width: 600px;
             margin: 50px auto;
@@ -28,10 +41,17 @@
         .price-highlight {
             font-size: 2rem;
             font-weight: 900;
+<<<<<<< HEAD
             color: var(--brand);
         }
         .btn-purchase {
             background: var(--brand);
+=======
+            color: #FF6A00;
+        }
+        .btn-purchase {
+            background: #FF6A00;
+>>>>>>> b65c320 (Initial commit)
             border: none;
             color: white;
             font-weight: 700;
@@ -48,10 +68,33 @@
 <body>
     <jsp:include page="../common/header.jsp" />
     
+<<<<<<< HEAD
     <div class="container mt-4">
         <div class="purchase-container">
             <h2 class="text-center mb-4">패스권 구매</h2>
             
+=======
+    <!-- 패스권 구매 헤더 -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="fw-bold">패스권 구매</h2>
+                    <p class="lead">안전하고 간편한 패스권 결제</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="text-center p-3" style="background: rgba(255,255,255,0.2); border-radius: 12px;">
+                        <div class="h3 mb-1">${pass.formattedPrice}</div>
+                        <small>결제 예정 금액</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mt-4">
+        <div class="purchase-container">
+>>>>>>> b65c320 (Initial commit)
             <!-- 선택한 패스권 정보 -->
             <div class="pass-info">
                 <h4>${pass.passName}</h4>
@@ -66,7 +109,11 @@
                     <small class="text-muted">
                         • 구매 즉시 사용 가능<br>
                         • 전국 모든 헬킹 가맹점 이용<br>
+<<<<<<< HEAD
                         • 구매 후 7일 이내 환불 가능
+=======
+                        • 구매 후 언제든지 환불 가능
+>>>>>>> b65c320 (Initial commit)
                     </small>
                 </div>
             </div>
@@ -163,6 +210,13 @@
         }
     </script>
     
+<<<<<<< HEAD
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+=======
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+>>>>>>> b65c320 (Initial commit)

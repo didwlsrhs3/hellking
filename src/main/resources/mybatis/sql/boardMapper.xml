@@ -3,6 +3,7 @@
 <!DOCTYPE mapper 
 PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<<<<<<< HEAD
 <!-- <mapper namespace="boardMapper"> -->
 <!-- 호출되어서 함께 동작할 인터페이스 지정 -->
 <mapper namespace="boardMapper">
@@ -17,6 +18,22 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<select id="listCriteria" 
 			parameterType="net.koreate.hellking.common.util.Criteria" 
 			resultType="boardVO">
+=======
+<mapper namespace="boardMapper">
+
+
+	<insert id="create" parameterType="net.koreate.hellking.board.vo.BoardVO">
+	  <selectKey keyProperty="bno" resultType="int" order="BEFORE">
+	    SELECT hell_board_seq.NEXTVAL FROM dual
+	  </selectKey>
+	  INSERT INTO hell_board(bno, title, content, nickname, user_id)
+	  VALUES(#{bno}, #{title}, #{content}, #{nickname}, #{userId})
+	</insert>
+		
+	<select id="listCriteria" 
+			parameterType="net.koreate.hellking.board.util.BoardCriteria" 
+			resultType="net.koreate.hellking.board.vo.BoardVO">
+>>>>>>> b65c320 (Initial commit)
 		SELECT * FROM hell_board ORDER BY bno DESC 
 		OFFSET #{startRow} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
 	</select>
@@ -25,11 +42,23 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		SELECT count(*) FROM hell_board
 	</select>
 	
+<<<<<<< HEAD
 	<select id="getHotBoard" resultType="boardVO" parameterType="boardVO">
 		SELECT * FROM hell_board
         WHERE agree >= #{HotAgree}
 	</select>
 
+=======
+	<select id="getHotBoard" parameterType="int"
+	        resultType="net.koreate.hellking.board.vo.BoardVO">
+	  SELECT bno, title, nickname, regdate, viewcnt, agree
+	  FROM hell_board
+	  WHERE agree >= #{HotAgree}
+	  ORDER BY agree DESC
+	</select>
+
+
+>>>>>>> b65c320 (Initial commit)
 	<!-- viewcnt 컬럼 기존 데이터를 1 증가해서 저장 -->
 	<update id="updateCnt" parameterType="int">
 		UPDATE hell_board SET viewcnt = viewcnt + 1 
@@ -37,6 +66,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	</update>
 	
 	<!-- 게시글 번호로 검색한 1개의 게시글 정보  -->
+<<<<<<< HEAD
 	<select id="read" parameterType="int" resultType="boardVO">
 		SELECT * FROM hell_board WHERE bno = #{bno}
 	</select>
@@ -44,6 +74,15 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<update id="update" parameterType="boardVO">
 		UPDATE hell_board SET title = #{title}, content = #{content}, 
 		writer = #{writer} WHERE bno = #{bno}
+=======
+	<select id="read" parameterType="int" resultType="net.koreate.hellking.board.vo.BoardVO">
+		SELECT * FROM hell_board WHERE bno = #{bno}
+	</select>
+	
+	<update id="update" parameterType="net.koreate.hellking.board.vo.BoardVO">
+		UPDATE hell_board SET title = #{title}, content = #{content}, 
+		nickname = #{nickname} WHERE bno = #{bno}
+>>>>>>> b65c320 (Initial commit)
 	</update>
 	
 	<delete id="delete" parameterType="int">
@@ -52,6 +91,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	
 	<!-- 추천 수 증가 및 증가시킨후 실시간 추천수 불러오기 -->
 	<update id="updateAgree" parameterType="int">
+<<<<<<< HEAD
 		UPDATE hell_board SET agree = agree + 1
 		WHERE bno = #{bno}
 	</update>
@@ -62,6 +102,133 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		WHERE bno = #{bno}
 	</select>
 	
+=======
+	  UPDATE hell_board SET agree = agree + 1
+	  WHERE bno = #{bno}
+	</update>
+	
+	<select id="viewAgree" resultType="int" parameterType="int">
+	  SELECT agree
+	  FROM hell_board
+	  WHERE bno = #{bno}
+	</select>
+	
+	<select id="existsUserAgree" parameterType="map" resultType="int">
+	  SELECT COUNT(*)
+	  FROM board_like
+	  WHERE bno = #{bno} AND user_id = #{userId}
+	</select>
+	
+	<!-- 추천 추가 -->
+	<insert id="insertUserAgree" parameterType="map">
+	  INSERT INTO board_like (bno, user_id)
+	  VALUES (#{bno}, #{userId})
+	</insert>
+	
+	<!-- 추천 취소 -->
+	<delete id="deleteUserAgree" parameterType="map">
+	  DELETE FROM board_like
+	  WHERE bno = #{bno} AND user_id = #{userId}
+	</delete>
+	
+	<update id="minusAgree" parameterType="int">
+	  UPDATE hell_board
+	  SET agree = CASE WHEN agree > 0 THEN agree - 1 ELSE 0 END
+	  WHERE bno = #{bno}
+	</update>
+	
+    <!-- 첨부파일 삽입 -->
+    <insert id="insertFiles" parameterType="java.util.List">
+        <foreach collection="list" item="file" separator=";">
+            INSERT INTO board_file (fno, bno, board_type, original_name, saved_name, upload_path, file_size)
+            VALUES (board_file_seq.NEXTVAL, #{file.bno}, #{file.board_type}, 
+                    #{file.originalName}, #{file.savedName}, #{file.uploadPath}, #{file.fileSize})
+        </foreach>
+    </insert>
+
+	
+    <select id="getFilesByBno" resultType="net.koreate.hellking.board.vo.FileVO">
+        SELECT fno,
+               bno,
+               board_type,
+               original_name AS originalName,
+               saved_name    AS savedName,
+               upload_path   AS uploadPath,
+               file_size     AS fileSize
+        FROM board_file
+        WHERE bno = #{bno}
+          AND board_type = #{boardType}
+    </select>
+    
+    <select id="findFileByFno" parameterType="int" resultType="net.koreate.hellking.board.vo.FileVO">
+        SELECT fno,
+               bno,
+               board_type,
+               original_name AS originalName,
+               saved_name    AS savedName,
+               upload_path   AS uploadPath,
+               file_size     AS fileSize
+        FROM board_file
+        WHERE fno = #{fno}
+    </select>
+    
+    <!-- 파일 삭제 -->
+    <delete id="deleteFile" parameterType="int">
+        DELETE FROM board_file WHERE fno = #{fno}
+    </delete>
+	  
+	  <!-- 글번호가져오기 -->
+	  <select id="getLastInsertedBno" resultType="int">
+		  SELECT MAX(bno) FROM hell_board
+	  </select>
+	  
+	  <!-- 게시글 검색 -->
+	<select id="listSearch" parameterType="net.koreate.hellking.board.util.BoardSearchCriteria" resultType="net.koreate.hellking.board.vo.BoardVO">
+		  SELECT * FROM hell_board
+		  <where>
+		    <if test="searchType != null and keyword != null and keyword != ''">
+		      <choose>
+		        <when test="searchType == 'bno'">
+		          bno = #{keyword}
+		        </when>
+		        <when test="searchType == 'title'">
+		          title LIKE '%' || #{keyword} || '%'
+		        </when>
+		        <when test="searchType == 'nickname'">
+		          nickname LIKE '%' || #{keyword} || '%'
+		        </when>
+		        <when test="searchType == 'regdate'">
+		          TO_CHAR(regdate, 'YYYY-MM-DD') = #{keyword}
+		        </when>
+		      </choose>
+		    </if>
+		  </where>
+		  ORDER BY bno DESC
+		  OFFSET #{startRow} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+	</select>
+
+	<select id="countSearch" parameterType="net.koreate.hellking.board.util.BoardSearchCriteria" resultType="int">
+	  SELECT COUNT(*) FROM hell_board
+	  <where>
+	    <if test="searchType != null and keyword != null and keyword != ''">
+	      <choose>
+	        <when test="searchType == 'bno'">
+	          bno = #{keyword}
+	        </when>
+	        <when test="searchType == 'title'">	
+	          title LIKE '%' || #{keyword} || '%'
+	        </when>
+	        <when test="searchType == 'nickname'">
+	          nickname LIKE '%' || #{keyword} || '%'
+	        </when>
+	        <when test="searchType == 'regdate'">
+	          TO_CHAR(regdate, 'YYYY-MM-DD') = #{keyword}
+	        </when>
+	      </choose>
+	    </if>
+	  </where>
+	</select>
+>>>>>>> b65c320 (Initial commit)
 	
 </mapper>
 

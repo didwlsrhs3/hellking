@@ -1,0 +1,453 @@
+@charset "UTF-8";
+
+:root {
+  --bg-white: #ffffff;
+  --ink: #0F172A;
+  --muted: #5B6170;
+  --line: #E7E0D6;
+  --brand: #FF6A00;
+  --hover: #FFF5EA;
+  --radius: 14px;
+}
+
+body {
+  background-color: var(--bg-white);
+  font-family: 'Noto Sans KR', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================= */
+/* 게시글 영역 */
+/* ============================= */
+.board-content {
+  max-width: 900px;
+  margin: 60px auto;
+  background: var(--bg-white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.boardtitle {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--brand);
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+
+.post-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.post-meta .nickname {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.post-meta .regdate {
+  color: var(--muted);
+}
+
+.post-content {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.file-section {
+  margin-bottom: 30px;
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.file-list li {
+  margin-bottom: 8px;
+}
+
+.file-list a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.file-list a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+.reaction-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.reaction-section button {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 70px;
+}
+
+.reaction-section button:hover {
+  background: #e85c00;
+}
+
+.reaction-section span {
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.button-group button {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  min-width: 70px;
+}
+
+.button-group button:hover {
+  background: #e85c00;
+}
+
+.divider {
+  border-top: 1px solid var(--line);
+  margin: 30px 0;
+}
+
+/* ============================= */
+/* 댓글 영역 */
+/* ============================= */
+.comment-section {
+  margin-top: 20px;
+}
+
+.comment-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.comment-form input[type="text"],
+.comment-form textarea {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.comment-form button {
+  align-self: flex-end;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.comment-form button:hover {
+  background: #e85c00;
+}
+
+.comment-item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.comment-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.comment-meta b {
+  color: var(--ink);
+}
+
+.comment-meta span {
+  color: var(--muted);
+}
+
+.comment-content {
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.comment-actions .left-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.comment-actions .right-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.comment-actions button {
+  background-color: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  min-width: 70px;   
+  text-align: center;
+}
+
+.comment-form button,
+.reply-form button {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 8px 0;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 14px;
+  width: 100px;   
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.comment-actions button:hover {
+  background: #e85c00;
+  transform: translateY(-1px);
+}
+
+.comment-actions button:active {
+  transform: scale(0.98);
+}
+
+.comment-actions .left-actions button,
+.comment-actions .right-actions button {
+  flex: 1;
+}
+
+/* 답글 작성 폼 */
+.reply-form {
+  margin-top: 12px;
+  margin-left: 30px;
+  display: none; /* JS 토글 제어용 */
+}
+
+.reply-form-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.reply-form input[type="text"],
+.reply-form textarea {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px;
+  font-size: 14px;
+  color: var(--ink);
+  background: #fff;
+}
+
+.reply-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.reply-form button {
+  align-self: flex-end;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.reply-form button:hover {
+  background: #e85c00;
+}
+
+/* ============================= */
+/* 계층형 들여쓰기 */
+/* ============================= */
+.comment-item.depth-2 {
+  margin-left: 30px;
+  background: #fafafa;
+}
+
+.comment-item.depth-3 {
+  margin-left: 60px;
+  background: #f5f5f5;
+}
+
+.comment-item.depth-4 {
+  margin-left: 90px;
+  background: #f0f0f0;
+}
+
+:root{
+  --btn-w: 50px;   
+  --btn-h: 40px;
+  --btn-radius: 14px;
+}
+
+.button-group button,
+.comment-actions button,
+.comment-actions .right-actions form > button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--btn-w) !important;   
+  height: var(--btn-h) !important; 
+  padding: 0 !important;            
+  border-radius: var(--btn-radius) !important;
+
+  background: var(--brand) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+  flex: 0 0 var(--btn-w);           /* flex 컨테이너에서도 크기 유지 */
+}
+
+.button-group button:hover,
+.comment-actions button:hover,
+.comment-actions .right-actions form > button:hover {
+  background: #e85c00 !important;
+  transform: translateY(-1px);
+}
+
+.button-group button:active,
+.comment-actions button:active,
+.comment-actions .right-actions form > button:active {
+  transform: scale(.98);
+}
+
+/* 댓글 수정 폼 */
+.edit-form {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.edit-form textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.edit-form button {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  margin-right: 6px;
+  transition: background 0.2s ease;
+}
+
+/* 저장 버튼 */
+.edit-form button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+}
+.edit-form button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* 취소 버튼 */
+.edit-form button[type="button"] {
+  background-color: #e0e0e0;
+  color: #333;
+}
+.edit-form button[type="button"]:hover {
+  background-color: #c0c0c0;
+}
+
+/* === 권한 제어 보조 클래스 === */
+.hk-hidden { display:none; }                  /* 완전 숨김 (공간 제거) */
+.hk-invisible { visibility:hidden; }         /* 공간 유지하며 숨김 */
+.hk-disabled { pointer-events:none; opacity:.5; }
+
+/* 버튼 정렬 통일 (좌: 답글, 우: 수정/삭제) */
+.hk-actionbar {
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+}
+.hk-left { display:flex; gap:8px; align-items:center; }
+.hk-right { display:flex; gap:8px; align-items:center; }
+
+/* 버튼 크기 통일 */
+.hk-btn { padding:.45rem .9rem; border:1px solid #ddd; border-radius:8px; font-size:14px; }
+.hk-btn-primary { border-color:#aaa; }

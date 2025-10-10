@@ -8,6 +8,19 @@
     <title>내 리뷰 - 헬킹 피트니스</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+<<<<<<< HEAD
+=======
+        body { 
+            background: white; 
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 60px 0;
+        }
+        
+>>>>>>> b65c320 (Initial commit)
         .stats-card {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
@@ -33,6 +46,7 @@
 <body>
     <jsp:include page="../common/header.jsp" />
     
+<<<<<<< HEAD
     <div class="container mt-4">
         <!-- 페이지 헤더 -->
         <div class="row mb-4">
@@ -47,6 +61,43 @@
             </div>
         </div>
         
+=======
+    <!-- 내 리뷰 관리 헤더 -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="fw-bold">내 리뷰 관리</h2>
+                    <p class="lead">작성한 리뷰를 확인하고 관리하세요</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="stats-card" style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 15px;">
+                                <div class="h4 mb-1">${stats.totalCount}</div>
+                                <small>작성</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stats-card" style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 15px;">
+                                <div class="h4 mb-1">${stats.avgRating}</div>
+                                <small>평균점수</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stats-card" style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 15px;">
+                                <div class="h4 mb-1">${stats.totalLikes}</div>
+                                <small>받은 좋아요</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mt-4">        
+>>>>>>> b65c320 (Initial commit)
         <!-- 통계 카드 -->
         <div class="stats-grid mb-5">
             <div class="stats-card p-4 text-center">
@@ -68,6 +119,7 @@
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-bold">작성한 리뷰 (${myReviews.size()}개)</h4>
+<<<<<<< HEAD
                     <div class="btn-group" role="group">
                         <input type="radio" class="btn-check" name="filterOptions" id="all" value="all" checked>
                         <label class="btn btn-outline-primary" for="all">전체</label>
@@ -77,6 +129,22 @@
                         
                         <input type="radio" class="btn-check" name="filterOptions" id="popular" value="popular">
                         <label class="btn btn-outline-primary" for="popular">인기 리뷰</label>
+=======
+                    <div class="d-flex gap-2">
+                        <a href="${pageContext.request.contextPath}/reviews/write" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>새 리뷰 작성
+                        </a>
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="filterOptions" id="all" value="all" checked>
+                            <label class="btn btn-outline-secondary" for="all">전체</label>
+                            
+                            <input type="radio" class="btn-check" name="filterOptions" id="recent" value="recent">
+                            <label class="btn btn-outline-secondary" for="recent">최근 작성</label>
+                            
+                            <input type="radio" class="btn-check" name="filterOptions" id="popular" value="popular">
+                            <label class="btn btn-outline-secondary" for="popular">인기 리뷰</label>
+                        </div>
+>>>>>>> b65c320 (Initial commit)
                     </div>
                 </div>
                 

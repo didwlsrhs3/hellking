@@ -110,4 +110,14 @@ public interface DesignBodyDAO {
     
     @Select("SELECT COUNT(*) FROM hk_design_body_enrollments WHERE status = 'ACTIVE'")
     int getActiveEnrollmentCount();
+<<<<<<< HEAD
+=======
+    
+ // DesignBodyDAO.java에 추가
+    @Select("SELECT COUNT(*) FROM hk_design_body_programs WHERE chain_num IS NULL AND is_active = 'Y'")
+    int getLegacyProgramCount();
+
+    @Select("SELECT * FROM hk_design_body_programs WHERE chain_num IS NULL AND is_active = 'Y'")
+    List<DesignBodyVO> selectLegacyPrograms();
+>>>>>>> b65c320 (Initial commit)
 }

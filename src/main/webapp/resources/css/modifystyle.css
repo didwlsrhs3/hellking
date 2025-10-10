@@ -1,0 +1,123 @@
+@charset "UTF-8";
+
+/* 색상 변수 */
+:root {
+  --bg: #ffffff;     /* 전체 배경 흰색 */
+  --ink: #0F172A;
+  --muted: #5B6170;
+  --line: #E7E0D6;
+  --brand: #FF6A00;
+  --brand-hover: #e85c00;
+  --radius: 14px;
+}
+
+/* 전체 배경 & 폰트 */
+body {
+  background-color: var(--bg);
+  font-family: 'Noto Sans KR', sans-serif;
+  margin: 0;
+  padding: 60px 0;
+}
+
+/* 카드형 컨테이너 */
+form {
+  width: 90%;               /* ✅ 넓이 확장 */
+  max-width: 900px;         /* ✅ 최대 900px */
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 40px 50px;       /* 여백도 살짝 넓힘 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+}
+
+/* 제목 */
+h1 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 35px;
+}
+
+/* 필드 그룹 */
+form div {
+  margin-bottom: 22px;
+}
+
+label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+/* 입력창 */
+input[type="text"],
+textarea,
+input[type="file"] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 15px;
+  color: var(--ink);
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: var(--brand);
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 150px;  /* 조금 더 넉넉하게 */
+}
+
+input[type="file"] {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+/* 첨부파일 링크 */
+form a {
+  color: var(--brand);
+  text-decoration: none;
+}
+
+form a:hover {
+  text-decoration: underline;
+}
+
+/* 버튼 영역 (오른쪽 정렬) */
+form div:last-of-type {
+  text-align: right;
+}
+
+/* 제출 버튼 */
+input[type="submit"] {
+  background-color: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+input[type="submit"]:hover {
+  background-color: var(--brand-hover);
+  transform: translateY(-1px);
+}
+
+input[type="submit"]:active {
+  transform: scale(0.98);
+}

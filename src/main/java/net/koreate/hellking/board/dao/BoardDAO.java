@@ -2,8 +2,17 @@ package net.koreate.hellking.board.dao;
 
 import java.util.List;
 
+<<<<<<< HEAD
 import net.koreate.hellking.board.vo.BoardVO;
 import net.koreate.hellking.common.util.Criteria;
+=======
+import org.apache.ibatis.annotations.Param;
+
+import net.koreate.hellking.board.util.BoardCriteria;
+import net.koreate.hellking.board.util.BoardSearchCriteria;
+import net.koreate.hellking.board.vo.BoardVO;
+import net.koreate.hellking.board.vo.FileVO;
+>>>>>>> b65c320 (Initial commit)
 
 public interface BoardDAO {
 	
@@ -46,7 +55,11 @@ public interface BoardDAO {
 	 * @param cri - 검색 기준
 	 * @return - 검색 기준에 따라 조회된 게시글 목록
 	 */
+<<<<<<< HEAD
 	List<BoardVO> listCriteria(Criteria cri) throws Exception;
+=======
+	List<BoardVO> listCriteria(BoardCriteria cri) throws Exception;
+>>>>>>> b65c320 (Initial commit)
 	
 	/**
 	 * 추천수 ~이상의 일정 게시물 조회
@@ -60,6 +73,7 @@ public interface BoardDAO {
 	void plusAgree(int bno) throws Exception;
 	
 	/**
+<<<<<<< HEAD
 	 * 추천 수 증가 실시간 조회 ajax이용
 	 */
 	int AgreeCount(int bno) throws Exception; 
@@ -68,3 +82,50 @@ public interface BoardDAO {
 	
 
 }
+=======
+	 * 증가가 있으면 감소가 있어야한다, 찬란한 빛에도 그림자는 있는 법이다.
+	 */
+	void minusAgree(int bno) throws Exception;
+	
+	/**
+	 * 추천 수 증가 실시간 조회 ajax이용
+	 */
+	int AgreeCount(int bno) throws Exception;
+	
+	/**
+	 * 추천 누가 하였는지, 그 유저가 이미 추천하였는지, 있으면 delete 없으면 insert
+	 */
+	boolean existsUserAgree(@Param("bno") int bno, @Param("userId") String userId);
+
+	void insertUserAgree(@Param("bno") int bno, @Param("userId") String userId);
+
+	void deleteUserAgree(@Param("bno") int bno, @Param("userId") String userId);
+	
+	/**
+	 * 첨부파일 처리하는 기능
+	 */
+	int getLastInsertedBno();
+	
+	void insertFiles(List<FileVO> files);
+	
+	List<FileVO> getFilesByBno(@Param("bno") int bno, @Param("boardType") String boardType);
+	
+	/**
+	 * 게시글 수정시에 첨부파일도 같이 업로드/삭제 수정가능하게
+	 */
+    FileVO findFileByFno(int fno) throws Exception;
+    
+    void deleteFile(int fno) throws Exception;
+    
+    List<BoardVO> listSearch(BoardSearchCriteria cri) throws Exception;
+    
+    int countSearch(BoardSearchCriteria cri) throws Exception;
+
+    
+    
+	
+
+	
+}
+
+>>>>>>> b65c320 (Initial commit)

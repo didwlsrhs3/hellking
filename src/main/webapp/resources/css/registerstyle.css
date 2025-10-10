@@ -1,0 +1,129 @@
+@charset "UTF-8";
+:root {
+  --bg-cream: #F4ECDC;
+  --ink: #0F172A;
+  --muted: #5B6170;
+  --line: #E7E0D6;
+  --brand: #FF6A00;
+  --hover: #FFF5EA;
+  --radius: 14px;
+}
+
+body {
+  background-color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin: 0;
+  padding: 100px 0;
+}
+
+/* 카드형 폼 박스 */
+.form-container {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* 제목 */
+h1 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 30px;
+}
+
+/* 폼 필드 */
+.form-container div {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+textarea,
+input[type="file"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--ink);
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+input[type="file"] {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+/* 제출 버튼 */
+input[type="submit"] {
+  background-color: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+input[type="submit"]:hover {
+  background-color: #e85c00;
+  transform: translateY(-1px);
+}
+
+input[type="submit"]:active {
+  transform: scale(0.98);
+}
+
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--ink);
+  background-color: #fff;
+  box-sizing: border-box;
+  appearance: none; /* 브라우저 기본 화살표 제거 */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='14' height='10' viewBox='0 0 14 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F172A' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px 10px;
+  cursor: pointer;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* 헤더와 겹치지 않도록 전체 여백 확보 */
+.form-container {
+  margin: 80px auto 40px; /* 위쪽 80px, 아래 40px, 좌우 중앙 */
+  max-width: 600px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}

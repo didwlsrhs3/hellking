@@ -4,6 +4,7 @@
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
     xmlns:tx="http://www.springframework.org/schema/tx"
+<<<<<<< HEAD
     xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
         http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
@@ -11,11 +12,31 @@
 
     <!-- Properties 파일 로드 -->
     <context:property-placeholder location="classpath:prop/*.properties"/>        
+=======
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd">
+
+    <!-- Properties 파일 로드 - 경로 수정 -->
+    <context:property-placeholder location="classpath:application.properties, classpath:prop/*.properties" ignore-resource-not-found="true"/>        
+>>>>>>> b65c320 (Initial commit)
      
     <!-- 서비스와 레포지토리만 스캔 (컨트롤러 제외) -->
 	<context:component-scan base-package="net.koreate.hellking">
 	    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+<<<<<<< HEAD
 	</context:component-scan>
+=======
+	</context:component-scan>		
+	    
+    <!-- KakaoMapService와 관련 클래스들을 스캔하도록 추가 -->
+	<context:component-scan base-package="net.koreate.hellking.common.service" />
+	<context:component-scan base-package="net.koreate.hellking.common.config" />
+	<context:component-scan base-package="net.koreate.hellking.common.utils" />	
+>>>>>>> b65c320 (Initial commit)
      
     <!-- Oracle Database HikariCP 설정 -->
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
@@ -56,7 +77,11 @@
     </bean>
     
     <!-- MyBatis Mapper 스캔 -->
+<<<<<<< HEAD
     <mybatis-spring:scan base-package="net.koreate.hellking.*.dao"/>
+=======
+    <mybatis-spring:scan base-package="net.koreate.hellking.chain.dao,net.koreate.hellking.pass.dao,net.koreate.hellking.qr.dao,net.koreate.hellking.user.dao,net.koreate.hellking.designbody.dao,net.koreate.hellking.review.dao,net.koreate.hellking.fooddiary.dao,net.koreate.hellking.support.dao,net.koreate.hellking.common.dao"/>   
+>>>>>>> b65c320 (Initial commit)
      
     <!-- Transaction Manager -->
     <bean id="transactionManager"
@@ -70,6 +95,21 @@
     <!-- BCrypt 패스워드 인코더 -->
     <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
      
+<<<<<<< HEAD
+=======
+    <!-- 파일 업로드 경로 설정 - properties에서 가져오기 -->
+    <bean id="uploadPath" class="java.lang.String">
+        <constructor-arg value="${upload.path}" />
+    </bean>
+    
+    <!-- 파일 업로드 해결자 - 추가됨 -->
+    <bean id="multipartResolver"
+         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+         <property name="maxUploadSize" value="${file.max.size}"/>
+         <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+     
+>>>>>>> b65c320 (Initial commit)
     <!-- 메일 발송 객체 -->
     <bean id="mailSender"
           class="org.springframework.mail.javamail.JavaMailSenderImpl">
@@ -92,5 +132,27 @@
         <constructor-arg value="${secret_api_key}"/>
         <constructor-arg value="${domain}"/>
     </bean>
+<<<<<<< HEAD
+=======
+    
+    
+    <!-- RestTemplate Bean 설정 -->
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+    <property name="requestFactory">
+        <bean class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+            <property name="connectTimeout" value="5000" />
+            <property name="readTimeout" value="10000" />
+        </bean>
+    </property>
+	</bean>
+	
+	<!-- ObjectMapper Bean 등록 (JSON 처리용) -->
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+	
+	<!-- 스케줄러 활성화 -->
+	<task:annotation-driven/>
+	<task:scheduler id="taskScheduler" pool-size="10"/>
+
+>>>>>>> b65c320 (Initial commit)
      
 </beans>

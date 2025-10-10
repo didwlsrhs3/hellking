@@ -13,7 +13,13 @@
         <org.springframework-version>5.3.39</org.springframework-version>
         <org.aspectj-version>1.9.24</org.aspectj-version>
         <org.slf4j-version>2.0.17</org.slf4j-version>
+<<<<<<< HEAD
     </properties>
+=======
+        <jackson.version>2.19.2</jackson.version>
+    	<httpclient.version>4.5.14</httpclient.version>
+	</properties>
+>>>>>>> b65c320 (Initial commit)
     
     		
 		<repositories>
@@ -255,6 +261,110 @@
 		    <artifactId>iamport-rest-client-java</artifactId>
 		    <version>0.2.23</version>  <!-- 최신 안정 버전으로 맞추세요 -->
 		  </dependency>
+<<<<<<< HEAD
+=======
+		  
+		  <!-- 기존 dependencies 섹션에 다음을 추가하세요 -->
+
+        <!-- Spring Web (카카오 API 호출용) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+
+        <!-- Jackson Core (JSON 처리용 - 추가) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.19.2</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.19.2</version>
+        </dependency>
+
+        <!-- HTTP 클라이언트 (Apache HttpComponents) -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+        </dependency>
+
+        <!-- URL 인코딩 처리용 -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.17.1</version>
+        </dependency>
+        
+        <!-- Spring Boot Configuration Processor (설정 값 처리용) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>2.7.18</version>
+            <optional>true</optional>
+        </dependency>
+        
+        <!-- OAuth2 및 JWT 처리를 위한 라이브러리 -->
+		<dependency>
+		    <groupId>com.auth0</groupId>
+		    <artifactId>java-jwt</artifactId>
+		    <version>4.4.0</version>
+		</dependency>
+		
+		<!-- HTTP 클라이언트 (이미 있지만 버전 확인) -->
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.5.14</version>
+		</dependency>
+		
+		<!-- JSON 처리 (이미 있지만 추가 확인) -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.19.2</version>
+		</dependency>
+		
+		<!-- 스프링 웹 모듈 (이미 있음 - 확인용) -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-web</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		
+		<!-- URL 인코딩/디코딩 (이미 있음 - 확인용) -->
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		    <version>1.17.1</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core</artifactId>
+		    <version>5.7.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId>
+		    <version>5.7.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-config</artifactId>
+		    <version>5.7.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.4</version>
+		</dependency>
+>>>>>>> b65c320 (Initial commit)
 		
 		<!-- 오라클 설치 안 되어서 임시로 -->
 <!-- 		<dependency>

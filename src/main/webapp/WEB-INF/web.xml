@@ -16,6 +16,15 @@
 	        <param-value>classpath:spring/appServlet/servlet-context.xml</param-value>
 	    </init-param>
 	    <load-on-startup>1</load-on-startup>
+<<<<<<< HEAD
+=======
+	    <!-- 파일 업로드 설정 추가 -->
+	    <multipart-config>
+	        <max-file-size>10485760</max-file-size>       <!-- 10MB -->
+	        <max-request-size>52428800</max-request-size>  <!-- 50MB -->
+	        <file-size-threshold>0</file-size-threshold>
+	    </multipart-config>
+>>>>>>> b65c320 (Initial commit)
 	</servlet>
     
     <servlet-mapping>
@@ -151,6 +160,7 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
     
+<<<<<<< HEAD
     <!-- 보안 제약사항 (선택사항) -->
     <!-- 
     <security-constraint>
@@ -167,4 +177,6 @@
     </security-constraint>
     -->
     
+=======
+>>>>>>> b65c320 (Initial commit)
 </web-app>

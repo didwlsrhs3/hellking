@@ -42,4 +42,9 @@ public class HellkingException extends RuntimeException {
     public Object[] getParameters() {
         return parameters;
     }
+<<<<<<< HEAD
+=======
+    
+    
+>>>>>>> b65c320 (Initial commit)
 }

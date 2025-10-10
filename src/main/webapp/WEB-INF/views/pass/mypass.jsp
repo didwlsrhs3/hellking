@@ -8,11 +8,24 @@
     <title>내 패스권 - 헬킹 피트니스</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+<<<<<<< HEAD
         :root {
             --bg-cream: #F4ECDC;
             --brand: #FF6A00;
         }
         body { background: var(--bg-cream); }
+=======
+        body { 
+            background: white; 
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 60px 0;
+        }
+        
+>>>>>>> b65c320 (Initial commit)
         .stat-card {
             background: white;
             border-radius: 12px;
@@ -36,9 +49,49 @@
 <body>
     <jsp:include page="../common/header.jsp" />
     
+<<<<<<< HEAD
     <div class="container mt-4">
         <h2 class="mb-4">내 패스권 관리</h2>
         
+=======
+    <!-- 내 패스권 헤더 -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="fw-bold">내 패스권 관리</h2>
+                    <p class="lead">패스권 이용 현황 및 히스토리 관리</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="stats-card" style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 15px;">
+                                <div class="h4 mb-1">${stats.activeCount}</div>
+                                <small>활성</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stats-card" style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 15px;">
+                                <div class="h4 mb-1">${stats.totalCount}</div>
+                                <small>총 구매</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stats-card" style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 15px;">
+                                <div class="h4 mb-1">
+                                    <fmt:formatNumber value="${stats.totalSpent / 10000}" maxFractionDigits="0"/>만
+                                </div>
+                                <small>총 결제</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mt-4">        
+>>>>>>> b65c320 (Initial commit)
         <!-- 통계 카드 -->
         <div class="row mb-4">
             <div class="col-md-4 mb-3">
@@ -83,6 +136,7 @@
                                         </p>
                                     </div>
                                     <div class="col-md-4 text-end">
+<<<<<<< HEAD
                                         <c:if test="${pass.canRefund}">
                                             <button class="btn btn-outline-light btn-sm" 
                                                     onclick="requestRefund(${pass.userPassNum})">
@@ -91,6 +145,15 @@
                                         </c:if>
                                         <a href="${pageContext.request.contextPath}/pass/detail/${pass.userPassNum}" 
                                            class="btn btn-light btn-sm ms-2">상세</a>
+=======
+                                        <a href="${pageContext.request.contextPath}/pass/detail/${pass.userPassNum}"
+                                           class="btn btn-outline-light btn-sm me-2">상세보기</a>
+                                        <c:if test="${pass.canRefund}">
+                                        <a href="${pageContext.request.contextPath}/pass/refund/${pass.userPassNum}"
+                                           class="btn btn-outline-light btn-sm">                                         
+                                                환불 신청</a>
+                                        </c:if>
+>>>>>>> b65c320 (Initial commit)
                                     </div>
                                 </div>
                             </div>
@@ -195,8 +258,13 @@
                                             <td><small>${refund.reason}</small></td>
                                             <td>
                                                 <span class="badge ${refund.status == 'COMPLETED' ? 'bg-success' : 
+<<<<<<< HEAD
                                                                   refund.status == 'APPROVED' ? 'bg-primary' :
                                                                   refund.status == 'REJECTED' ? 'bg-danger' : 'bg-warning'}">
+=======
+                                                              refund.status == 'APPROVED' ? 'bg-primary' :
+                                                              refund.status == 'REJECTED' ? 'bg-danger' : 'bg-warning'}">
+>>>>>>> b65c320 (Initial commit)
                                                     ${refund.statusText}
                                                 </span>
                                             </td>
@@ -237,6 +305,10 @@
         }
     </script>
     
+<<<<<<< HEAD
+=======
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+>>>>>>> b65c320 (Initial commit)
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

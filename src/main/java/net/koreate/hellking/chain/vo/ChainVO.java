@@ -13,6 +13,13 @@ public class ChainVO {
     private String imagePath;
     private Date createdAt;
     
+<<<<<<< HEAD
+=======
+    // 좌표 정보 추가
+    private Double latitude;     // 위도
+    private Double longitude;    // 경도
+    
+>>>>>>> b65c320 (Initial commit)
     // 가맹점 코드 관련
     private String chainCode;    // 4자리 코드
     private String isActive;
@@ -52,4 +59,24 @@ public class ChainVO {
         }
         return reviewCount + "개 리뷰";
     }
+<<<<<<< HEAD
+=======
+    
+    // 좌표 유효성 검사
+    public boolean hasCoordinates() {
+        return latitude != null && longitude != null && 
+               latitude != 0.0 && longitude != 0.0;
+    }
+    
+    // 거리 포맷팅
+    public String getFormattedDistance() {
+        if (distance == null) return "";
+        
+        if (distance < 1) {
+            return String.format("%.0fm", distance * 1000);
+        } else {
+            return String.format("%.1fkm", distance);
+        }
+    }
+>>>>>>> b65c320 (Initial commit)
 }

@@ -1,0 +1,245 @@
+@charset "UTF-8";
+:root {
+  --bg-cream: #F4ECDC;
+  --ink: #0F172A;
+  --muted: #5B6170;
+  --line: #E7E0D6;
+  --brand: #FF6A00;
+  --hover: #FFF5EA;
+  --radius: 14px;
+}
+html{
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: white;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin: 0;
+  padding-bottom : 10px;
+}
+
+/* 전체 레이아웃 */
+.board-container {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 40px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-top : 50px;
+}
+
+/* 좌측 카테고리 */
+.category {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.category-menu {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.category-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-menu li {
+  margin-bottom: 10px;
+}
+
+.category-menu a, p {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  display: block;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  transition: background 0.2s, color 0.2s;
+  border: 1px solid var(--line);
+}
+
+.category-menu a:hover {
+  background-color: var(--hover);
+  color: var(--brand);
+}
+
+/* 게시판 테이블 영역 */
+.board-content {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.standardboard{
+	border-bottom: 1px solid var(--line);
+	border-top: 1px solid var(--line);
+}
+
+th {
+  background-color: var(--hover);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+td {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.boardtitle {
+  font-size: 18px;
+  color: var(--brand);
+  background-color: #fff;
+  border-bottom: none;
+  padding-top: 24px;
+}
+
+/* 게시물 제목 링크 */
+td a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+}
+td a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+/* 글쓰기 버튼 */
+#registbutton {
+  margin: 20px 0;
+  padding: 10px 20px;
+  background-color: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+#registbutton:hover {
+  background-color: #e85c00;
+  transform: translateY(-1px);
+}
+#registbutton:active {
+  transform: scale(0.98);
+}
+
+.pagination {
+  text-align: center;        /* 가운데 정렬 */
+  margin: 20px 0;            /* 위아래 여백 */
+}
+
+.pagination a {
+  display: inline-block;     /* 버튼 형태 */
+  width: 50px;               /* 가로 크기 */
+  height: 30px;              /* 세로 크기 */
+  line-height: 30px;         /* 텍스트 수직 가운데 정렬 */
+  margin: 0 3px;             /* 버튼 간격 */
+  background-color: #007BFF; /* 파란색 (부트스트랩 느낌) */
+  color: #fff;               /* 흰색 글자 */
+  text-decoration: none;     /* 밑줄 제거 */
+  border-radius: 4px;        /* 모서리 둥글게 */
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.pagination a:hover {
+  background-color: #0056b3; /* hover 시 어두운 파랑 */
+}
+
+/* 검색 창 래퍼: 테이블 안에서 중앙 정렬 */
+.search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;              /* 요소 간격 */
+  margin: 16px 0 12px;   /* 위/아래 여백 */
+  flex-wrap: wrap;       /* 좁은 화면에서 줄바꿈 */
+}
+
+/* 셀렉트/인풋 공통 */
+.search-form select,
+.search-form input[type="text"] {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  min-width: 140px;
+  box-sizing: border-box;
+}
+
+/* 인풋(키워드)은 조금 더 넓게 */
+.search-form input[type="text"] {
+  min-width: 240px;
+}
+
+/* 포커스 시 테두리 강조 */
+.search-form select:focus,
+.search-form input[type="text"]:focus {
+  border-color: #66a3ff;
+  box-shadow: 0 0 0 3px rgba(102,163,255,0.2);
+}
+
+/* 검색 버튼: 파란 박스 + 흰 글씨 */
+.search-form button[type="submit"] {
+  height: 36px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #007BFF;  /* 파란색 */
+  color: #fff;                /* 흰 글씨 */
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .15s ease, transform .05s ease;
+}
+
+/* 호버/활성 효과 */
+.search-form button[type="submit"]:hover {
+  background-color: #0056b3;  /* 좀 더 진한 파랑 */
+}
+.search-form button[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+/* placeholder 색 살짝 연하여 가독성 */
+.search-form input::placeholder {
+  color: #999;
+}
+
+/* 좁은 화면 대응 */
+@media (max-width: 520px) {
+  .search-form {
+    gap: 6px;
+  }
+.search-form input[type="text"] {
+    min-width: 180px;
+    flex: 1; /* 남는 공간 채우기 */
+  }
+  
+}
+

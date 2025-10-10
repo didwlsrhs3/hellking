@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper 
+<<<<<<< HEAD
 PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 호출되어서 함께 동작할 인터페이스 지정 -->
@@ -80,3 +81,107 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 
 
 
+=======
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="localMapper">
+
+    <!-- 글 등록 -->
+    <insert id="create" parameterType="net.koreate.hellking.board.vo.LocalBoardVO">
+        INSERT INTO local_board (bno, title, content, nickname, category_id, regdate, viewcnt, agree)
+        VALUES (local_board_seq.NEXTVAL, #{title}, #{content}, #{nickname}, #{categoryId}, SYSDATE, 0, 0)
+    </insert>
+
+    <!-- 검색 + 페이징 -->
+    <select id="listSearch" parameterType="net.koreate.hellking.board.util.LocalBoardSearchCriteria"
+            resultType="net.koreate.hellking.board.vo.LocalBoardVO">
+        SELECT *
+        FROM local_board
+        <where>
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'title'">
+                        title LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'nickname'">
+                        nickname LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+            <if test="categoryId != null and categoryId > 0">
+                AND category_id = #{categoryId}
+            </if>
+        </where>
+        ORDER BY bno DESC
+        OFFSET #{startRow} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+    </select>
+
+    <!-- 검색된 총 개수 -->
+    <select id="countSearch" parameterType="net.koreate.hellking.board.util.LocalBoardSearchCriteria" resultType="int">
+        SELECT COUNT(*)
+        FROM local_board
+        <where>
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'title'">
+                        title LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'nickname'">
+                        nickname LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+            <if test="categoryId != null and categoryId > 0">
+                AND category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 상세 조회 -->
+    <select id="read" parameterType="int" resultType="net.koreate.hellking.board.vo.LocalBoardVO">
+        SELECT * FROM local_board WHERE bno = #{bno}
+    </select>
+
+    <!-- 조회수 증가 -->
+    <update id="updateCnt" parameterType="int">
+        UPDATE local_board SET viewcnt = viewcnt + 1 WHERE bno = #{bno}
+    </update>
+
+    <!-- 글 수정 -->
+    <update id="update" parameterType="net.koreate.hellking.board.vo.LocalBoardVO">
+        UPDATE local_board
+        SET title = #{title},
+            content = #{content},
+            nickname = #{nickname},
+            category_id = #{categoryId}
+        WHERE bno = #{bno}
+    </update>
+
+    <!-- 글 삭제 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM local_board WHERE bno = #{bno}
+    </delete>
+
+    <!-- 추천 +1 -->
+    <update id="updateAgree" parameterType="int">
+        UPDATE local_board SET agree = agree + 1 WHERE bno = #{bno}
+    </update>
+
+    <!-- 추천 수 조회 -->
+    <select id="viewAgree" parameterType="int" resultType="int">
+        SELECT agree FROM local_board WHERE bno = #{bno}
+    </select>
+
+    <!-- 전체 지역 게시글 -->
+    <select id="selectAllLocalPosts" resultType="net.koreate.hellking.board.vo.LocalBoardVO">
+        SELECT * FROM local_board ORDER BY regdate DESC
+    </select>
+
+    <!-- 카테고리별 게시글 -->
+    <select id="selectLocalPostsByCategory" parameterType="int"
+            resultType="net.koreate.hellking.board.vo.LocalBoardVO">
+        SELECT * FROM local_board WHERE category_id = #{categoryId} ORDER BY regdate DESC
+    </select>
+</mapper>
+>>>>>>> b65c320 (Initial commit)

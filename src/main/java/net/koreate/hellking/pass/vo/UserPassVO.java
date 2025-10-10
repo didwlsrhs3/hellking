@@ -12,6 +12,10 @@ public class UserPassVO {
     private Date endDate;
     private String status;           // ACTIVE, EXPIRED, CANCELLED, REFUNDED
     private Date purchaseDate;
+<<<<<<< HEAD
+=======
+    private Date createdAt;          // 추가된 필드
+>>>>>>> b65c320 (Initial commit)
     private String paymentId;
     
     // 조인용 필드

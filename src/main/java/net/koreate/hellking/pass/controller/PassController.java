@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+<<<<<<< HEAD
+=======
+import org.springframework.web.bind.annotation.RequestParam;
+>>>>>>> b65c320 (Initial commit)
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.koreate.hellking.pass.service.PassService;
@@ -264,6 +268,7 @@ public class PassController {
         return "pass/refund";
     }
     
+<<<<<<< HEAD
     @PostMapping("requestRefund")
     @ResponseBody
     public Map<String, Object> requestRefund(Long userPassNum, String reason, HttpSession session) {
@@ -282,6 +287,31 @@ public class PassController {
             result.put("success", success);
             result.put("message", success ? "환불 신청이 완료되었습니다." : "환불 신청에 실패했습니다.");
             
+=======
+ // PassController.java의 환불 신청 메소드 수정
+    @PostMapping("/requestRefund")
+    @ResponseBody
+    public Map<String, Object> requestRefund(@RequestParam Long userPassNum,
+                                           @RequestParam String reason,
+                                           @RequestParam String bankName,
+                                           @RequestParam String accountNumber,
+                                           @RequestParam String accountHolder,
+                                           HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        
+        try {
+            boolean success = passService.requestRefundWithAccount(userPassNum, reason, 
+                                                                 bankName, accountNumber, accountHolder);
+            
+            if (success) {
+                result.put("success", true);
+                result.put("message", "환불 신청이 완료되었습니다.");
+            } else {
+                result.put("success", false);
+                result.put("message", "환불 신청에 실패했습니다.");
+            }
+            
+>>>>>>> b65c320 (Initial commit)
         } catch (Exception e) {
             result.put("success", false);
             result.put("message", e.getMessage());
@@ -303,4 +333,34 @@ public class PassController {
         }
         return "redirect:/pass/mypass";
     }
+<<<<<<< HEAD
+=======
+    
+    @PostMapping("/requestRefundWithAccount")
+    @ResponseBody
+    public Map<String, Object> requestRefundWithAccount(
+        @RequestParam Long userPassNum,
+        @RequestParam String reason,
+        @RequestParam String bankName,
+        @RequestParam String accountNumber,
+        @RequestParam String accountHolder,
+        HttpSession session) {
+        
+        Map<String, Object> result = new HashMap<>();
+        
+        try {
+            boolean success = passService.requestRefundWithAccount(
+                userPassNum, reason, bankName, accountNumber, accountHolder);
+            
+            result.put("success", success);
+            result.put("message", success ? "환불 신청이 완료되었습니다." : "환불 신청에 실패했습니다.");
+            
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        
+        return result;
+    }
+>>>>>>> b65c320 (Initial commit)
 }

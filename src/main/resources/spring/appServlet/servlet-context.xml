@@ -14,18 +14,59 @@
     <!-- Enables the Spring MVC @Controller programming model -->
     <annotation-driven />
     
+<<<<<<< HEAD
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources -->
     <resources mapping="/resources/**" location="/resources/" />
     
+=======
+    <!-- 🔧 Response 인코딩 및 청크 인코딩 오류 해결 설정 -->
+    <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <beans:property name="messageConverters">
+            <beans:list>
+                <beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <beans:property name="defaultCharset" value="UTF-8" />
+                    <beans:property name="supportedMediaTypes">
+                        <beans:list>
+                            <beans:value>text/plain;charset=UTF-8</beans:value>
+                            <beans:value>text/html;charset=UTF-8</beans:value>
+                            <beans:value>application/json;charset=UTF-8</beans:value>
+                        </beans:list>
+                    </beans:property>
+                </beans:bean>
+                <beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                    <beans:property name="defaultCharset" value="UTF-8" />
+                </beans:bean>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+    
+    <!-- ✅ 중요: MultipartResolver 설정 추가 -->
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+        <!-- 추가 설정은 web.xml의 multipart-config에서 처리 -->
+    </beans:bean>
+    
+    <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources -->
+    <resources mapping="/resources/**" location="/resources/" />
+    
+    <!-- 업로드된 파일 접근을 위한 정적 리소스 매핑 -->
+    <resources mapping="/upload/**" location="/upload/" />
+    
+>>>>>>> b65c320 (Initial commit)
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources -->
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
+<<<<<<< HEAD
+=======
+        <!-- JSP 인코딩 설정 추가 -->
+        <beans:property name="contentType" value="text/html;charset=UTF-8" />
+>>>>>>> b65c320 (Initial commit)
     </beans:bean>
     
     <!-- AOP 자동 프록시 -->
     <aop:aspectj-autoproxy />
     
+<<<<<<< HEAD
     <!-- 컨트롤러만 스캔 -->
 	<context:component-scan base-package="net.koreate.hellking" use-default-filters="false">
 	    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -47,6 +88,12 @@
          <beans:property name="maxUploadSize" value="10485760"/>
          <beans:property name="defaultEncoding" value="UTF-8"/>
     </beans:bean>
+=======
+    <!-- 컨트롤러만 스캔 (Service는 root-context.xml에서 처리) -->
+    <context:component-scan base-package="net.koreate.hellking" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+>>>>>>> b65c320 (Initial commit)
     
     <!-- WebSocket 핸들러 등록 -->
     <beans:bean id="qrWebSocketHandler" class="net.koreate.hellking.qr.websocket.QRWebSocketHandler"/>
