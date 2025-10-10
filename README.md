@@ -194,11 +194,6 @@ hellking_extracted/
   - `jackson.version`: 2.19.2
   - `httpclient.version`: 4.5.14
 
-## 🤝 기여 & 라이선스
-
-- Pull Request / Issue 환영합니다.
-- 라이선스: 프로젝트에 맞는 라이선스를 루트에 `LICENSE` 파일로 추가하세요.
-
 ## 👤 개발자
 
-- Author: 양진곤
+- Author: 양진곤, 이지황!, 이희승
